@@ -7,6 +7,7 @@ import { NxWelcome } from './nx-welcome';
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  standalone: true,
 })
 export class App {
   protected title = 'frontend';

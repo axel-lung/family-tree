@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { PersonFacade } from '../person-facade.service';
 import { Person } from '@family-tree-workspace/shared-models';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,7 +18,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     InputTextModule,
     ButtonModule,
     CardModule,
-    CalendarModule,
+    DatePickerModule,
   ],
   template: `
     <p-card
@@ -27,62 +27,62 @@ import { ActivatedRoute, Router } from '@angular/router';
       <div class="p-fluid">
         <div class="p-field">
           <label for="first_name">Prénom</label>
-          <p-inputText
+          <input
             id="first_name"
             [(ngModel)]="person.first_name"
-          ></p-inputText>
+          />
         </div>
         <div class="p-field">
           <label for="last_name">Nom</label>
-          <p-inputText
+          <input
             id="last_name"
             [(ngModel)]="person.last_name"
-          ></p-inputText>
+          />
         </div>
         <div class="p-field">
           <label for="birth_date">Date de naissance</label>
-          <p-calendar
+          <p-datepicker
             id="birth_date"
             [(ngModel)]="person.birth_date"
             dateFormat="yy-mm-dd"
-          ></p-calendar>
+          ></p-datepicker>
         </div>
         <div class="p-field">
           <label for="birth_place">Lieu de naissance</label>
-          <p-inputText
+          <input
             id="birth_place"
             [(ngModel)]="person.birth_place"
-          ></p-inputText>
+          />
         </div>
         <div class="p-field">
           <label for="death_date">Date de décès</label>
-          <p-calendar
+          <p-datepicker
             id="death_date"
             [(ngModel)]="person.death_date"
             dateFormat="yy-mm-dd"
-          ></p-calendar>
+          ></p-datepicker>
         </div>
         <div class="p-field">
           <label for="biography">Biographie</label>
-          <p-inputText
+          <input
             id="biography"
             [(ngModel)]="person.biography"
-          ></p-inputText>
+          />
         </div>
         <div class="p-field" *ngIf="isOwnProfile">
           <label for="email">Email</label>
-          <p-inputText id="email" [(ngModel)]="person.email"></p-inputText>
+          <input id="email" [(ngModel)]="person.email"/>
         </div>
         <div class="p-field" *ngIf="isOwnProfile">
           <label for="phone">Téléphone</label>
-          <p-inputText id="phone" [(ngModel)]="person.phone"></p-inputText>
+          <input id="phone" [(ngModel)]="person.phone"/>
         </div>
         <div class="p-field" *ngIf="isOwnProfile">
           <label for="residence">Résidence</label>
-          <p-inputText
+          <input
             id="residence"
             [(ngModel)]="person.residence"
-          ></p-inputText>
+          />
         </div>
         <p-button label="Enregistrer" (click)="save()"></p-button>
       </div>

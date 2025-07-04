@@ -5,6 +5,8 @@ import { PersonDetailComponent } from './person-detail/person-detail.component';
 import { AuthGuard } from './auth.guard';
 import { PersonFormComponent } from './person-form/person-form.component';
 import { RelationshipFormComponent } from './relationship-form/relationship-form.component';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { ShareComponent } from './share/share.component';
 
 export const routes: Routes = [
   { path: 'login', component: AuthComponent },
@@ -13,5 +15,7 @@ export const routes: Routes = [
   { path: 'person-form', component: PersonFormComponent, canActivate: [AuthGuard] },
   { path: 'person-form/:id', component: PersonFormComponent, canActivate: [AuthGuard] },
   { path: 'relationship-form', component: RelationshipFormComponent, canActivate: [AuthGuard] },
+  { path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard] },
+  { path: 'share/:token', component: ShareComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];

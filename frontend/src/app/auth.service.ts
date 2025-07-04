@@ -18,6 +18,11 @@ export class AuthService {
     if (token) {
       try {
         const decoded: any = jwtDecode(token);
+        const now = Math.floor(Date.now() / 1000);
+        if (decoded.exp < now) {
+          this.logout();
+          return;
+        }
         this.userSubject.next({
           id: decoded.id,
           email: '',

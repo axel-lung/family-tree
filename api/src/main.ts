@@ -8,6 +8,8 @@ import cors from 'cors';
 import personRoutes from './routes/person.routes';
 import relationshipRoutes from './routes/relationship.routes';
 import permissionRoutes from './routes/permission.routes';
+import userRoutes from './routes/user.routes';
+import shareRoutes from './routes/share.routes';
 
 dotenv.config();
 
@@ -30,6 +32,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/persons', personRoutes);
 app.use('/api/relationships', relationshipRoutes);
 app.use('/api/permissions', permissionRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/share', shareRoutes);
 app.use(cors({ origin: 'http://localhost:4200' }));
 
 async function bootstrap() {
@@ -38,7 +42,7 @@ async function bootstrap() {
     console.log('Database connection established');
     await redisClient.connect();
     initModels(); // Initialiser les relations
-    await sequelize.sync({ force: true }); // Force: true pour développement, à retirer en production
+    await sequelize.sync({ force: false }); // Force: true pour développement, à retirer en production
     console.log('Database synced');
     app.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);

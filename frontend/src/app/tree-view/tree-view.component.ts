@@ -1,103 +1,139 @@
-import { Component, OnInit } from '@angular/core';
-   import { CommonModule } from '@angular/common';
-   import { OrganizationChartModule } from 'primeng/organizationchart';
-   import { TreeNode } from 'primeng/api';
-   import { PersonFacade } from '../person-facade.service';
-   import { Person, Relationship } from '@family-tree-workspace/shared-models';
-   import { Router } from '@angular/router';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { PersonFacade } from '../person-facade.service';
+import { Person, Relationship } from '@family-tree-workspace/shared-models';
+import { Router } from '@angular/router';
+import cytoscape from 'cytoscape';
+import dagre from 'cytoscape-dagre';
 
-   @Component({
-     selector: 'app-tree-view',
-     standalone: true,
-     imports: [CommonModule, OrganizationChartModule],
-     template: `
-       <p-organizationChart [value]="treeNodes" (onNodeSelect)="onNodeSelect($event)">
-         <ng-template let-node pTemplate="person">
-           <div class="node-content" [ngClass]="{'deleted': node.data.deleted}">
-             <span>{{ node.label }}</span>
-             <span *ngIf="node.data.spouse" class="spouse">Conjoint: {{ node.data.spouse.first_name }} {{ node.data.spouse.last_name }}</span>
-           </div>
-         </ng-template>
-       </p-organizationChart>
-     `,
-     styles: [`
-       .node-content {
-         padding: 15px;
-         border: 2px solid #007ad9;
-         border-radius: 8px;
-         background-color: #f8f9fa;
-         cursor: pointer;
-         text-align: center;
-       }
-       .node-content.deleted {
-         border-color: #dc3545;
-         background-color: #f8d7da;
-         opacity: 0.6;
-       }
-       .spouse {
-         display: block;
-         font-size: 0.9em;
-         color: #555;
-       }
-       :host ::ng-deep .p-organizationchart .p-organizationchart-node-content {
-         padding: 0;
-       }
-       :host ::ng-deep .p-organizationchart .p-organizationchart-line {
-         border-color: #007ad9;
-       }
-     `],
-   })
-   export class TreeViewComponent implements OnInit {
-     treeNodes: TreeNode[] = [];
+cytoscape.use(dagre); // Enregistrement du layout dagre
 
-     constructor(private personFacade: PersonFacade, private router: Router) {}
+@Component({
+  selector: 'app-tree-view',
+  standalone: true,
+  imports: [CommonModule],
+  template: ` <div #cy class="cytoscape-container"></div> `,
+  styles: [
+    `
+      :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    `,
+  ],
+})
+export class TreeViewComponent implements OnInit {
+  @ViewChild('cy', { static: true }) cyContainer!: ElementRef;
+  private cy!: cytoscape.Core;
 
-     ngOnInit() {
-       this.personFacade.getPersons().subscribe(persons => {
-         this.personFacade.getRelationships().subscribe(relationships => {
-           this.treeNodes = this.buildTreeNodes(persons, relationships);
-         });
-       });
-     }
+  constructor(private personFacade: PersonFacade, private router: Router) {}
 
-     buildTreeNodes(persons: Person[], relationships: Relationship[]): TreeNode[] {
-       const nodes: TreeNode[] = [];
-       const personMap = new Map<number, Person>(persons.map(p => [p.id, p]));
-       const hasParent = new Set(relationships.filter(r => r.relationship_type === 'child').map(r => r.person2_id));
-       const roots = persons.filter(p => !hasParent.has(p.id) && !p.deleted);
+  ngOnInit() {
+    this.personFacade.getPersons().subscribe((persons) => {
+      console.log(persons);
+      this.personFacade.getRelationships().subscribe((relationships) => {
+        this.initCytoscape(persons, relationships);
+      });
+    });
+  }
 
-       roots.forEach(root => {
-         nodes.push(this.buildNode(root, personMap, relationships));
-       });
+  initCytoscape(persons: Person[], relationships: Relationship[]) {
+    const elements = this.buildElements(persons, relationships);
 
-       return nodes;
-     }
+    this.cy = cytoscape({
+      container: this.cyContainer.nativeElement,
+      elements,
+      style: [
+        {
+          selector: 'node',
+          style: {
+            'background-color': '#007ad9',
+            label: 'data(label)',
+            color: '#fff',
+            'text-valign': 'center',
+            'text-halign': 'center',
+            width: '100px',
+            height: '40px',
+            'border-width': '2px',
+            'border-color': '#004d99',
+            padding: '10px',
+          },
+        },
+        {
+          selector: 'node.deleted',
+          style: {
+            'background-color': '#dc3545',
+          },
+        },
+        {
+          selector: 'edge',
+          style: {
+            width: 2,
+            'line-color': '#007ad9',
+            'curve-style': 'bezier',
+          },
+        },
+        {
+          selector: 'edge.spouse',
+          style: {
+            'line-style': 'dashed',
+            'line-color': '#28a745',
+          },
+        },
+      ],
+      layout: {
+        name: 'dagre', // Layout hiérarchique pour arbre généalogique
+      },
+    });
 
-     buildNode(person: Person, personMap: Map<number, Person>, relationships: Relationship[]): TreeNode {
-       const children: TreeNode[] = [];
-       const childRelationships = relationships.filter(r => r.relationship_type === 'child' && r.person1_id === person.id);
-       const spouseRelationships = relationships.filter(r => r.relationship_type === 'spouse' && r.person1_id === person.id);
+    this.cy.on('tap', 'node', (event) => {
+      const person = event.target.data('person') as Person;
+      this.personFacade.getPerson(person.id);
+      this.router.navigate(['/person', person.id]);
+    });
+  }
 
-       childRelationships.forEach(rel => {
-         const child = personMap.get(rel.person2_id);
-         if (child && !child.deleted) {
-           children.push(this.buildNode(child, personMap, relationships));
-         }
-       });
+  buildElements(
+    persons: Person[],
+    relationships: Relationship[]
+  ): cytoscape.ElementDefinition[] {
+    const elements: cytoscape.ElementDefinition[] = [];
 
-       const spouse = spouseRelationships.length > 0 ? personMap.get(spouseRelationships[0].person2_id) : undefined;
+    // Ajouter les nœuds (personnes)
+    persons.forEach((person) => {
+      if (!person.deleted) {
+        elements.push({
+          data: {
+            id: `person-${person.id}`,
+            label: `${person.first_name} ${person.last_name}`,
+            person,
+          },
+          classes: person.deleted ? 'deleted' : '',
+        });
+      }
+    });
 
-       return {
-         label: `${person.first_name} ${person.last_name}`,
-         data: { ...person, spouse },
-         expanded: false,
-         children,
-       };
-     }
+    // Ajouter les arêtes (relations)
+    relationships.forEach((rel) => {
+      if (rel.relationship_type === 'child') {
+        elements.push({
+          data: {
+            source: `person-${rel.person1_id}`,
+            target: `person-${rel.person2_id}`,
+          },
+        });
+      } else if (rel.relationship_type === 'spouse') {
+        elements.push({
+          data: {
+            source: `person-${rel.person1_id}`,
+            target: `person-${rel.person2_id}`,
+          },
+          classes: 'spouse',
+        });
+      }
+    });
 
-     onNodeSelect(event: any) {
-       const person = event.node.data as Person;
-       this.personFacade.getPerson(person.id);
-       this.router.navigate(['/person', person.id]);
-     }
-   }
+    return elements;
+  }
+}

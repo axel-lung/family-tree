@@ -17,7 +17,14 @@ export const getPerson = async (req: Request, res: Response) => {
     if (!person || person.deleted) {
       return res.status(404).json({ error: 'Person not found' });
     }
-    res.json(person);
+    const user = req.user as { id: number; role: string };
+    const response = { ...person.get(), email: null, phone: null, residence: null };
+    if (user.role === 'admin' || person.user_id === user.id) {
+      response.email = person.email;
+      response.phone = person.phone;
+      response.residence = person.residence;
+    }
+    res.json(response);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch person' });
   }

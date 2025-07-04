@@ -7,13 +7,14 @@ import {
   deletePerson,
 } from '../controllers/person.controller';
 import { authenticateJWT } from '../middleware/jwt.middleware';
+import { checkPermission } from '../middleware/rbac.middleware';
 
 const router = Router();
 
-router.get('/', authenticateJWT, getPersons);
-router.get('/:id', authenticateJWT, getPerson);
-router.post('/', authenticateJWT, createPerson);
-router.put('/:id', authenticateJWT, updatePerson);
-router.delete('/:id', authenticateJWT, deletePerson);
+router.get('/', authenticateJWT, checkPermission('read'), getPersons);
+router.get('/:id', authenticateJWT, checkPermission('read'), getPerson);
+router.post('/', authenticateJWT, checkPermission('create'), createPerson);
+router.put('/:id', authenticateJWT, checkPermission('update'), updatePerson);
+router.delete('/:id', authenticateJWT, checkPermission('delete'), deletePerson);
 
 export default router;

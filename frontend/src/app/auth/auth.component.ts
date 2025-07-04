@@ -5,12 +5,19 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ApiService } from '../api.service';
+import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputTextModule, ButtonModule, CardModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    InputTextModule,
+    ButtonModule,
+    CardModule,
+  ],
   template: `
     <p-card header="Authentification">
       <div class="p-fluid">
@@ -23,7 +30,11 @@ import { Router } from '@angular/router';
           <input id="password" [(ngModel)]="password" type="password" />
         </div>
         <p-button label="Connexion" (click)="login()"></p-button>
-        <p-button label="Inscription" (click)="register()" styleClass="p-button-secondary"></p-button>
+        <p-button
+          label="Inscription"
+          (click)="register()"
+          styleClass="p-button-secondary"
+        ></p-button>
       </div>
     </p-card>
   `,
@@ -33,12 +44,16 @@ export class AuthComponent {
   password: string = '';
   role: string = 'guest';
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(
+    private apiService: ApiService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   login() {
     this.apiService.login(this.email, this.password).subscribe({
       next: (response) => {
-        localStorage.setItem('token', response.token);
+        this.authService.setUser(response.token);
         this.router.navigate(['/tree']);
       },
       error: (err) => console.error('Login failed', err),
@@ -48,7 +63,7 @@ export class AuthComponent {
   register() {
     this.apiService.register(this.email, this.password, this.role).subscribe({
       next: (response) => {
-        localStorage.setItem('token', response.token);
+        this.authService.setUser(response.token);
         this.router.navigate(['/tree']);
       },
       error: (err) => console.error('Registration failed', err),

@@ -89,7 +89,7 @@ import { DataTypes, Model } from 'sequelize';
        sequelize,
        modelName: 'Person',
        tableName: 'persons',
-       timestamps: true,
+       timestamps: false,
      }
    );
 

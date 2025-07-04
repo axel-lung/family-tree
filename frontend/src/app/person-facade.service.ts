@@ -72,4 +72,12 @@ export class PersonFacade {
     }
     return this.relationshipsCache.asObservable();
   }
+
+  createRelationship(relationship: Partial<Relationship>): Observable<Relationship> {
+    return this.apiService.createRelationship(relationship).pipe(
+      tap(newRelationship => {
+        this.relationshipsCache.next([...this.relationshipsCache.value, newRelationship]);
+      })
+    );
+  }
 }

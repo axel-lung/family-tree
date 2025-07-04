@@ -11,7 +11,9 @@
     "isolatedModules": true,
     "emitDecoratorMetadata": false,
     "importHelpers": true,
-    "module": "esnext"
+    "module": "esnext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

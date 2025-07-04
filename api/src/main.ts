@@ -7,6 +7,7 @@ import { redisClient } from './config/redis.config';
 import cors from 'cors';
 import personRoutes from './routes/person.routes';
 import relationshipRoutes from './routes/relationship.routes';
+import permissionRoutes from './routes/permission.routes';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/persons', personRoutes);
 app.use('/api/relationships', relationshipRoutes);
+app.use('/api/permissions', permissionRoutes);
 app.use(cors({ origin: 'http://localhost:4200' }));
 
 async function bootstrap() {

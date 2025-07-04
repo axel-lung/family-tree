@@ -34,7 +34,7 @@ import { DataTypes, Model } from 'sequelize';
          type: DataTypes.BOOLEAN,
          defaultValue: false,
        },
-       can_investing_update: {
+       can_update: {
          type: DataTypes.BOOLEAN,
          defaultValue: false,
        },
@@ -51,7 +51,7 @@ import { DataTypes, Model } from 'sequelize';
        sequelize,
        modelName: 'Permission',
        tableName: 'permissions',
-       timestamps: true,
+       timestamps: false,
      }
    );
 

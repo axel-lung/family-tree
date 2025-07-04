@@ -40,6 +40,6 @@ import { DataTypes, Model } from 'sequelize';
        sequelize,
        modelName: 'Relationship',
        tableName: 'relationships',
-       timestamps: true,
+       timestamps: false,
      }
    );

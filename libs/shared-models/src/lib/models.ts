@@ -9,6 +9,7 @@ export interface Person {
   user_id?: number;
   first_name: string;
   last_name: string;
+  gender?: 'M' | 'F';
   birth_date?: string;
   birth_place?: string;
   death_date?: string;
@@ -24,7 +25,7 @@ export interface Relationship {
   id: number;
   person1_id: number;
   person2_id: number;
-  relationship_type: 'parent' | 'child' | 'spouse';
+  relationship_type: 'parent' | 'child' | 'spouse' | 'mother' | 'father';
 }
 
 export interface Permission {

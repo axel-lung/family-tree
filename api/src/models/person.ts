@@ -7,6 +7,7 @@ import { DataTypes, Model } from 'sequelize';
      public user_id!: number | null;
      public first_name!: string;
      public last_name!: string;
+     public gender!: string | null;
      public birth_date!: Date | null;
      public birth_place!: string | null;
      public death_date!: Date | null;
@@ -38,6 +39,10 @@ import { DataTypes, Model } from 'sequelize';
        },
        last_name: {
          type: DataTypes.STRING(100),
+         allowNull: false,
+       },
+       gender: {
+         type: DataTypes.STRING(1),
          allowNull: false,
        },
        birth_date: {

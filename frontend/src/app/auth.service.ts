@@ -51,6 +51,14 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+    try {
+      const decoded: any = jwtDecode(token);
+      const now = Math.floor(Date.now() / 1000);
+      return decoded.exp >= now;
+    } catch (error) {
+      return false;
+    }
   }
 }

@@ -3,16 +3,17 @@ import { CommonModule } from '@angular/common';
 import { PersonFacade } from '../person-facade.service';
 import { Person, Relationship } from '@family-tree-workspace/shared-models';
 import { Router } from '@angular/router';
-import cytoscape from 'cytoscape';
-import dagre from 'cytoscape-dagre';
-
-cytoscape.use(dagre); // Enregistrement du layout dagre
+import f3 from 'family-chart';
 
 @Component({
   selector: 'app-tree-view',
   standalone: true,
   imports: [CommonModule],
-  template: ` <div #cy class="cytoscape-container"></div> `,
+  template: `<div
+    id="FamilyChart"
+    class="f3"
+    style="width:100%;height:100vh;margin:auto;background-color:rgb(33,33,33);color:#fff;"
+  ></div>`,
   styles: [
     `
       :host {
@@ -20,120 +21,117 @@ cytoscape.use(dagre); // Enregistrement du layout dagre
         width: 100%;
         height: 100%;
       }
+      
     `,
   ],
 })
 export class TreeViewComponent implements OnInit {
-  @ViewChild('cy', { static: true }) cyContainer!: ElementRef;
-  private cy!: cytoscape.Core;
-
   constructor(private personFacade: PersonFacade, private router: Router) {}
 
   ngOnInit() {
     this.personFacade.getPersons().subscribe((persons) => {
-      console.log(persons);
       this.personFacade.getRelationships().subscribe((relationships) => {
-        this.initCytoscape(persons, relationships);
+        let data: any = [];
+
+        persons.forEach((person) => {
+          const spouseRel = relationships.filter(
+            (relationship) =>
+              relationship.person1_id === person.id &&
+              relationship.relationship_type === 'spouse'
+          );
+          let allspouses: any = [];
+          spouseRel.forEach((spouse) => {
+            allspouses.push(spouse.person2_id);
+          });
+
+          const childrenRel = relationships.filter(
+            (relationship) =>
+              relationship.person2_id === person.id &&
+              (relationship.relationship_type === 'father' ||
+                relationship.relationship_type === 'mother')
+          );
+
+          let allchildren: any = [];
+          childrenRel.forEach((child) => {
+            allchildren.push(child.person1_id);
+          });
+
+          let motherId: any = '';
+          const motherRel = relationships.find(
+            (relationship) =>
+              relationship.person1_id === person.id &&
+              relationship.relationship_type === 'mother'
+          );
+          motherId = motherRel?.person2_id;
+
+          let fatherId: any = '';
+          const fatherRel = relationships.find(
+            (relationship) =>
+              relationship.person1_id === person.id &&
+              relationship.relationship_type === 'father'
+          );
+          fatherId = fatherRel?.person2_id;
+
+          data.push({
+            id: person.id,
+            data: {
+              gender: person.gender,
+              'first name': person.first_name,
+              'last name': person.last_name,
+              birthday: person.birth_date,
+              avatar: '',
+              tes:
+                '<a class="flex" style="color: #333; text-decoration: none;padding: 2px; border-radius: 5px; background: white;" href="person/' +
+                person.id +
+                '">Voir les détails</a>',
+            },
+            rels: {
+              spouses: allspouses,
+              father: fatherId,
+              mother: motherId,
+              children: allchildren,
+            },
+          });
+        });
+
+        this.create(data);
       });
     });
   }
 
-  initCytoscape(persons: Person[], relationships: Relationship[]) {
-    const elements = this.buildElements(persons, relationships);
+  create(data: any) {
+    const f3Chart = f3
+      .createChart('#FamilyChart', data)
+      .setTransitionTime(1000)
+      .setCardXSpacing(350)
+      .setCardYSpacing(250)
+      .setSingleParentEmptyCard(true, { label: 'ADD' })
+      .setShowSiblingsOfMain(true)
+      .setOrientationVertical()
+      .setAncestryDepth(10)
+      .setProgenyDepth(10)
+      .setPrivateCardsConfig(false);
 
-    this.cy = cytoscape({
-      container: this.cyContainer.nativeElement,
-      elements,
-      style: [
-        {
-          selector: 'node',
-          style: {
-            'background-color': '#007ad9',
-            label: 'data(label)',
-            color: '#fff',
-            'text-valign': 'center',
-            'text-halign': 'center',
-            width: '100px',
-            height: '40px',
-            'border-width': '2px',
-            'border-color': '#004d99',
-            padding: '10px',
-          },
-        },
-        {
-          selector: 'node.deleted',
-          style: {
-            'background-color': '#dc3545',
-          },
-        },
-        {
-          selector: 'edge',
-          style: {
-            width: 2,
-            'line-color': '#007ad9',
-            'curve-style': 'bezier',
-          },
-        },
-        {
-          selector: 'edge.spouse',
-          style: {
-            'line-style': 'dashed',
-            'line-color': '#28a745',
-          },
-        },
-      ],
-      layout: {
-        name: 'dagre', // Layout hiérarchique pour arbre généalogique
-      },
-    });
+    const f3Card = f3Chart
+      .setCard(f3.CardHtml)
+      .setCardDisplay([['first name', 'last name'], ['tes'], ['test']])
+      .setCardDim({})
+      .setMiniTree(true)
+      .setStyle('imageRect')
+      .setOnHoverPathToMain();
 
-    this.cy.on('tap', 'node', (event) => {
-      const person = event.target.data('person') as Person;
-      this.personFacade.getPerson(person.id);
-      this.router.navigate(['/person', person.id]);
-    });
-  }
+    const f3EditTree = f3Chart
+      .editTree()
+      .fixed(true)
+      .setFields(['first name', 'last name', 'birthday', 'avatar'])
+      .setEditFirst(true);
+    // .setCardClickOpen(f3Card);
 
-  buildElements(
-    persons: Person[],
-    relationships: Relationship[]
-  ): cytoscape.ElementDefinition[] {
-    const elements: cytoscape.ElementDefinition[] = [];
+    f3EditTree.setEdit();
 
-    // Ajouter les nœuds (personnes)
-    persons.forEach((person) => {
-      if (!person.deleted) {
-        elements.push({
-          data: {
-            id: `person-${person.id}`,
-            label: `${person.first_name} ${person.last_name}`,
-            person,
-          },
-          classes: person.deleted ? 'deleted' : '',
-        });
-      }
-    });
+    f3Chart.updateTree({ initial: true });
+    // f3EditTree.open(f3Chart.getMainDatum());
 
-    // Ajouter les arêtes (relations)
-    relationships.forEach((rel) => {
-      if (rel.relationship_type === 'child') {
-        elements.push({
-          data: {
-            source: `person-${rel.person1_id}`,
-            target: `person-${rel.person2_id}`,
-          },
-        });
-      } else if (rel.relationship_type === 'spouse') {
-        elements.push({
-          data: {
-            source: `person-${rel.person1_id}`,
-            target: `person-${rel.person2_id}`,
-          },
-          classes: 'spouse',
-        });
-      }
-    });
-
-    return elements;
+    f3Chart.updateTree({ initial: true });
   }
 }

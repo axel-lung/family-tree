@@ -1,1 +1,93 @@
-<p>person-form works!</p>
+<p-card [header]="isEdit ? 'Modifier une personne' : 'Ajouter une personne'">
+  <div class="grid p-fluid">
+    <div class="p-field col-6">
+      <p-fieldset legend="Prénom">
+        <input id="first_name" pInputText [(ngModel)]="person.first_name" />
+      </p-fieldset>
+    </div>
+    <div class="p-field col-6">
+      <p-fieldset legend="Nom">
+        <input id="last_name" pInputText [(ngModel)]="person.last_name"
+      /></p-fieldset>
+    </div>
+    <div class="p-field col-6">
+      <p-fieldset legend="Genre">
+        <p-select
+          [options]="genders"
+          [(ngModel)]="person.gender"
+          placeholder="Choisir un genre"
+          class="w-full md:w-56"
+        />
+      </p-fieldset>
+    </div>
+    <div class="p-field col-6">
+      <p-fieldset legend="Date de naissance">
+        <p-datepicker
+          id="birth_date"
+          [(ngModel)]="person.birth_date"
+          dateFormat="yy-mm-dd"
+        ></p-datepicker
+      ></p-fieldset>
+    </div>
+    <div class="p-field col-6">
+      <p-fieldset legend="Lieu de naissance">
+        <input id="birth_place" pInputText [(ngModel)]="person.birth_place"
+      /></p-fieldset>
+    </div>
+    <div class="p-field col-6">
+      <p-fieldset legend="Date de décès">
+        <p-datepicker
+          id="death_date"
+          [(ngModel)]="person.death_date"
+          dateFormat="yy-mm-dd"
+        ></p-datepicker
+      ></p-fieldset>
+    </div>
+
+    <div class="p-field col-6" *ngIf="isOwnProfile">
+      <p-fieldset legend="Email">
+        <input id="email" pInputText [(ngModel)]="person.email"
+      /></p-fieldset>
+    </div>
+    <div class="p-field col-6" *ngIf="isOwnProfile">
+      <p-fieldset legend="Téléphone">
+        <input id="phone" pInputText [(ngModel)]="person.phone"
+      /></p-fieldset>
+    </div>
+    <div class="p-field col-6" *ngIf="isOwnProfile">
+      <p-fieldset legend="Résidence">
+        <input id="residence" pInputText [(ngModel)]="person.residence"
+      /></p-fieldset>
+    </div>
+    <div class="p-field col-12">
+      <p-fieldset legend="Biographie">
+        <textarea
+          rows="5"
+          cols="100%"
+          pTextarea
+          pInputText
+          id="biography"
+          [(ngModel)]="person.biography"
+        ></textarea>
+      </p-fieldset>
+    </div>
+    <div class="p-field col-12" *ngIf="isOwnProfile">
+      <p-fieldset legend="Ajouter un avatar">
+        <p-fileupload
+          name="demo[]"
+          url="https://www.primefaces.org/cdn/api/upload.php"
+          (onUpload)="onUpload($event)"
+          [multiple]="true"
+          accept="image/*"
+          maxFileSize="10000000"
+          mode="advanced"
+        >
+          <ng-template #empty>
+            <div>Drag and drop files to here to upload.</div>
+          </ng-template>
+        </p-fileupload>
+      </p-fieldset>
+    </div>
+    <p-button class=" flex justify-content-center	col-12" label="Enregistrer" (click)="save()"></p-button>
+  </div>
+</p-card>

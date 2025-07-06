@@ -13,11 +13,20 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ToastModule } from 'primeng/toast';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TableModule } from 'primeng/table';
+import { MenubarModule } from 'primeng/menubar';
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { BadgeModule } from 'primeng/badge';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { MessageService } from 'primeng/api';
+import { TextareaModule } from 'primeng/textarea';
+import { FileUploadModule } from 'primeng/fileupload';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(
-      BrowserAnimationsModule,       // ✅ importer ici
+      BrowserAnimationsModule,
       OrganizationChartModule,
       ButtonModule,
       InputTextModule,
@@ -25,7 +34,15 @@ export const appConfig: ApplicationConfig = {
       NgxChartsModule,
       ToastModule,
       TableModule,
-      InputSwitchModule
+      InputSwitchModule,
+      MenubarModule,
+      AvatarModule,
+      AvatarGroupModule,
+      BadgeModule,
+      OverlayBadgeModule,
+      MessageService,
+      TextareaModule,
+      FileUploadModule
     ),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),

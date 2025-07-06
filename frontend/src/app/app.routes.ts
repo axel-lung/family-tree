@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
 import { TreeViewComponent } from './tree-view/tree-view.component';
 import { PersonDetailComponent } from './person-detail/person-detail.component';
@@ -7,6 +7,7 @@ import { PersonFormComponent } from './person-form/person-form.component';
 import { RelationshipFormComponent } from './relationship-form/relationship-form.component';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { ShareComponent } from './share/share.component';
+import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
   { path: 'login', component: AuthComponent },
@@ -17,5 +18,11 @@ export const routes: Routes = [
   { path: 'relationship-form', component: RelationshipFormComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard] },
   { path: 'share/:token', component: ShareComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/tree', pathMatch: 'full' },
 ];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }

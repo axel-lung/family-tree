@@ -1,7 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PersonFacade } from '../person-facade.service';
-import { Person, Relationship } from '@family-tree-workspace/shared-models';
 import { Router } from '@angular/router';
 import f3 from 'family-chart';
 
@@ -36,41 +35,41 @@ export class TreeViewComponent implements OnInit {
         persons.forEach((person) => {
           const spouseRel = relationships.filter(
             (relationship) =>
-              relationship.person1_id === person.id &&
+              relationship.person2_id === person.id &&
               relationship.relationship_type === 'spouse'
           );
           let allspouses: any = [];
           spouseRel.forEach((spouse) => {
-            allspouses.push(spouse.person2_id);
+            allspouses.push(spouse.person1_id);
           });
 
           const childrenRel = relationships.filter(
             (relationship) =>
-              relationship.person2_id === person.id &&
+              relationship.person1_id === person.id &&
               (relationship.relationship_type === 'father' ||
                 relationship.relationship_type === 'mother')
           );
 
           let allchildren: any = [];
           childrenRel.forEach((child) => {
-            allchildren.push(child.person1_id);
+            allchildren.push(child.person2_id);
           });
 
           let motherId: any = '';
           const motherRel = relationships.find(
             (relationship) =>
-              relationship.person1_id === person.id &&
+              relationship.person2_id === person.id &&
               relationship.relationship_type === 'mother'
           );
-          motherId = motherRel?.person2_id;
+          motherId = motherRel?.person1_id;
 
           let fatherId: any = '';
           const fatherRel = relationships.find(
             (relationship) =>
-              relationship.person1_id === person.id &&
+              relationship.person2_id === person.id &&
               relationship.relationship_type === 'father'
           );
-          fatherId = fatherRel?.person2_id;
+          fatherId = fatherRel?.person1_id;
 
           data.push({
             id: person.id,
@@ -105,7 +104,7 @@ export class TreeViewComponent implements OnInit {
       .setTransitionTime(1000)
       .setCardXSpacing(350)
       .setCardYSpacing(250)
-      .setSingleParentEmptyCard(true, { label: 'ADD' })
+      .setSingleParentEmptyCard(false, { label: 'ADD' })
       .setShowSiblingsOfMain(true)
       .setOrientationVertical()
       .setAncestryDepth(10)
@@ -114,7 +113,7 @@ export class TreeViewComponent implements OnInit {
 
     const f3Card = f3Chart
       .setCard(f3.CardHtml)
-      .setCardDisplay([['first name', 'last name'], ['tes'], ['test']])
+      .setCardDisplay([['first name', 'last name'], ['tes']])
       .setCardDim({})
       .setMiniTree(true)
       .setStyle('imageRect')

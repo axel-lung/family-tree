@@ -7,6 +7,9 @@ import { CardModule } from 'primeng/card';
 import { PersonFacade } from '../person-facade.service';
 import { Relationship } from '@family-tree-workspace/shared-models';
 import { Router } from '@angular/router';
+import { SelectModule } from 'primeng/select';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-relationship-form',
@@ -17,32 +20,26 @@ import { Router } from '@angular/router';
     DropdownModule,
     ButtonModule,
     CardModule,
+    SelectModule,
+    ToastModule,
   ],
   template: `
+    <p-toast />
     <p-card header="Ajouter une relation">
-      <div class="p-fluid">
+      <div class="p-fluid pt-6">
         <div class="p-field">
-          <label for="person1">Personne 1</label>
-          <p-dropdown
-            id="person1"
+          <p-select
             [options]="persons"
             [(ngModel)]="relationship.person1_id"
             optionLabel="label"
             optionValue="id"
-          ></p-dropdown>
+            [filter]="true"
+            placeholder="Choisir une personne"
+            class="w-full md:w-56"
+          />
         </div>
+        <span> est </span>
         <div class="p-field">
-          <label for="person2">Personne 2</label>
-          <p-dropdown
-            id="person2"
-            [options]="persons"
-            [(ngModel)]="relationship.person2_id"
-            optionLabel="label"
-            optionValue="id"
-          ></p-dropdown>
-        </div>
-        <div class="p-field">
-          <label for="relationship_type">Type de relation</label>
           <p-dropdown
             id="relationship_type"
             [options]="relationshipTypes"
@@ -51,21 +48,46 @@ import { Router } from '@angular/router';
             optionValue="value"
           ></p-dropdown>
         </div>
-        <p-button label="Enregistrer" (click)="save()"></p-button>
+        <span> de </span>
+        <div class="p-field mb-6">
+          <p-select
+            [options]="persons"
+            [(ngModel)]="relationship.person2_id"
+            optionLabel="label"
+            optionValue="id"
+            [filter]="true"
+            placeholder="Choisir une personne"
+            class="w-full md:w-56"
+          />
+        </div>
+        <div class="mt-6 flex justify-content-center p-field col-12">
+          <p-button
+            class="mr-4"
+            label="Annuler"
+            variant="text"
+            severity="danger"
+            (click)="goBack()"
+          />
+          <p-button label="Enregistrer" (click)="save()"></p-button>
+        </div>
       </div>
     </p-card>
   `,
 })
 export class RelationshipFormComponent implements OnInit {
-  relationship: Partial<Relationship> = { relationship_type: 'parent' };
+  relationship: Partial<Relationship> = { relationship_type: 'mother' };
   persons: { id: number; label: string }[] = [];
   relationshipTypes = [
-    { label: 'Parent', value: 'parent' },
-    { label: 'Enfant', value: 'child' },
+    { label: 'Père', value: 'father' },
+    { label: 'Mère', value: 'mother' },
     { label: 'Conjoint', value: 'spouse' },
   ];
 
-  constructor(private personFacade: PersonFacade, private router: Router) {}
+  constructor(
+    private personFacade: PersonFacade,
+    private router: Router,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
     this.personFacade.getPersons().subscribe((persons) => {
@@ -76,7 +98,88 @@ export class RelationshipFormComponent implements OnInit {
     });
   }
 
+  goBack() {
+    this.router.navigate(['/tree']);
+  }
+
   save() {
+    console.log(this.relationship);
+
+    if (
+      this.relationship.relationship_type == 'father' ||
+      this.relationship.relationship_type == 'mother'
+    ) {
+      const relationshipChild: Partial<Relationship> = {
+        person1_id: this.relationship.person2_id,
+        person2_id: this.relationship.person1_id,
+        relationship_type: 'child',
+      };
+      this.personFacade.createRelationship(relationshipChild).subscribe({
+        next: (res) => {
+          console.log('OUIIOI');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Succès',
+            detail: 'Relation ajoutée avec succès',
+          });
+        },
+        error: (err) => {
+          if (err.status === 400) {
+            console.log('OKKK');
+
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Attention',
+              detail: 'Cette relation existe déjà',
+            });
+          } else {
+            console.log('NOK');
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: 'Une erreur est survenue lors de la création',
+            });
+          }
+        },
+      });
+    }
+
+    if (this.relationship.relationship_type == 'spouse') {
+      const relationshipSpouse: Partial<Relationship> = {
+        person1_id: this.relationship.person2_id,
+        person2_id: this.relationship.person1_id,
+        relationship_type: 'spouse',
+      };
+      this.personFacade.createRelationship(relationshipSpouse).subscribe({
+        next: (res) => {
+          console.log('OUIIOI');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Succès',
+            detail: 'Relation ajoutée avec succès',
+          });
+        },
+        error: (err) => {
+          if (err.status === 400) {
+            console.log('OKKK');
+
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Attention',
+              detail: 'Cette relation existe déjà',
+            });
+          } else {
+            console.log('NOK');
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: 'Une erreur est survenue lors de la création',
+            });
+          }
+        },
+      });
+    }
+
     this.personFacade.createRelationship(this.relationship).subscribe(() => {
       this.router.navigate(['/tree']);
     });

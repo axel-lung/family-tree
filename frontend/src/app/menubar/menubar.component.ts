@@ -30,15 +30,15 @@ import { User } from '@family-tree-workspace/shared-models';
     ButtonModule,
   ],
   template: `
-    <p-menubar [model]="items">
+    <p-menubar class="fixed z-5 w-full" [model]="items">
       <ng-template #start> </ng-template>
 
       <ng-template #end>
         <div class="flex gap-2">
-          <p-inputgroup>
+          <!-- <p-inputgroup>
             <input pInputText placeholder="Prénom NOM" />
             <p-button label="Chercher" />
-          </p-inputgroup>
+          </p-inputgroup> -->
           <p-button
             *ngIf="isAuthenticated"
             label="Déconnexion"

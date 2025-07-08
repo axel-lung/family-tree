@@ -1,5 +1,5 @@
 <p-card [header]="isEdit ? 'Modifier une personne' : 'Ajouter une personne'">
-  <div class="grid p-fluid">
+  <div class="grid p-fluid pt-6">
     <div class="p-field col-6">
       <p-fieldset legend="Prénom">
         <input id="first_name" pInputText [(ngModel)]="person.first_name" />
@@ -88,6 +88,9 @@
         </p-fileupload>
       </p-fieldset>
     </div>
-    <p-button class=" flex justify-content-center	col-12" label="Enregistrer" (click)="save()"></p-button>
+    <div class="mt-6 flex justify-content-center p-field col-12">
+      <p-button class="mr-4" label="Annuler" variant="text" severity="danger" (click)="goBack()" />
+      <p-button label="Enregistrer" (click)="save()"></p-button>
+    </div>
   </div>
 </p-card>

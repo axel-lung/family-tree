@@ -7,6 +7,7 @@ import { CardModule } from 'primeng/card';
 import { ApiService } from '../api.service';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { FieldsetModule } from 'primeng/fieldset';
 
 @Component({
   selector: 'app-auth',
@@ -17,24 +18,22 @@ import { Router } from '@angular/router';
     InputTextModule,
     ButtonModule,
     CardModule,
+    FieldsetModule
   ],
   template: `
-    <p-card header="Authentification">
+    <p-card header="Authentification" class="flex justify-content-center">
       <div class="p-fluid">
-        <div class="p-field">
-          <label for="email">Email</label>
-          <input id="email" [(ngModel)]="email" type="email" />
+        <div class="p-field col-3">
+          <p-fieldset legend="Email">
+          <input id="email" pInputText [(ngModel)]="email" type="email" />
+          </p-fieldset>
         </div>
-        <div class="p-field">
-          <label for="password">Mot de passe</label>
-          <input id="password" [(ngModel)]="password" type="password" />
+        <div class="p-field col-3">
+          <p-fieldset legend="Mot de passe">
+          <input id="password" pInputText [(ngModel)]="password" type="password" />
+          </p-fieldset>
         </div>
-        <p-button label="Connexion" (click)="login()"></p-button>
-        <p-button
-          label="Inscription"
-          (click)="register()"
-          styleClass="p-button-secondary"
-        ></p-button>
+        <p-button class="flex justify-content-center" label="Connexion" (click)="login()"></p-button>
       </div>
     </p-card>
   `,

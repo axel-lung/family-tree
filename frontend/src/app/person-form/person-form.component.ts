@@ -12,8 +12,6 @@ import { FileUpload } from 'primeng/fileupload';
 import { FieldsetModule } from 'primeng/fieldset';
 import { Select } from 'primeng/select';
 
-
-
 @Component({
   selector: 'app-person-form',
   standalone: true,
@@ -27,7 +25,6 @@ import { Select } from 'primeng/select';
     FileUpload,
     FieldsetModule,
     Select,
-    
   ],
   templateUrl: './person-form.component.html',
 })
@@ -68,6 +65,10 @@ export class PersonFormComponent implements OnInit {
         this.router.navigate(['/tree']);
       });
     }
+  }
+
+  goBack() {
+    this.router.navigate(['/tree']);
   }
 
   onUpload(event: any) {

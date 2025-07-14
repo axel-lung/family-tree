@@ -21,13 +21,13 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: apps/frontend/Dockerfile
+          file: frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/family-tree-frontend:latest
       - name: Build and push backend
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: apps/api/Dockerfile
+          file: api/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/family-tree-backend:latest

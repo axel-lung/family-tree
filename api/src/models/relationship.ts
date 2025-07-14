@@ -1,6 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
    import { sequelize } from '../config/database';
-   import { Person } from './person';
 
    export class Relationship extends Model {
      public id!: number;

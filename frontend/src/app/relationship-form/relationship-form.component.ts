@@ -5,11 +5,12 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { PersonFacade } from '../person-facade.service';
-import { Relationship } from '@family-tree-workspace/shared-models';
+import { Family, Relationship } from '@family-tree-workspace/shared-models';
 import { Router } from '@angular/router';
 import { SelectModule } from 'primeng/select';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { FamilyService } from '../family.service';
 
 @Component({
   selector: 'app-relationship-form',
@@ -82,15 +83,18 @@ export class RelationshipFormComponent implements OnInit {
     { label: 'Mère', value: 'mother' },
     { label: 'Conjoint', value: 'spouse' },
   ];
+  family: Family = {id: 0, name:""};
 
   constructor(
     private personFacade: PersonFacade,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private familyService: FamilyService
   ) {}
 
   ngOnInit() {
-    this.personFacade.getPersons().subscribe((persons) => {
+    this.familyService.getSelectedFamily().subscribe(f => this.family = f);
+    this.personFacade.getPersons(this.family.id).subscribe((persons) => {
       this.persons = persons.map((p) => ({
         id: p.id,
         label: `${p.first_name} ${p.last_name}`,
@@ -103,8 +107,6 @@ export class RelationshipFormComponent implements OnInit {
   }
 
   save() {
-    console.log(this.relationship);
-
     if (
       this.relationship.relationship_type == 'father' ||
       this.relationship.relationship_type == 'mother'
@@ -116,7 +118,6 @@ export class RelationshipFormComponent implements OnInit {
       };
       this.personFacade.createRelationship(relationshipChild).subscribe({
         next: (res) => {
-          console.log('OUIIOI');
           this.messageService.add({
             severity: 'success',
             summary: 'Succès',
@@ -125,7 +126,6 @@ export class RelationshipFormComponent implements OnInit {
         },
         error: (err) => {
           if (err.status === 400) {
-            console.log('OKKK');
 
             this.messageService.add({
               severity: 'warn',
@@ -133,7 +133,6 @@ export class RelationshipFormComponent implements OnInit {
               detail: 'Cette relation existe déjà',
             });
           } else {
-            console.log('NOK');
             this.messageService.add({
               severity: 'error',
               summary: 'Erreur',

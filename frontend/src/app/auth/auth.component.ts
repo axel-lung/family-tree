@@ -53,7 +53,7 @@ export class AuthComponent {
     this.apiService.login(this.email, this.password).subscribe({
       next: (response) => {
         this.authService.setUser(response.token);
-        this.router.navigate(['/tree']);
+        this.router.navigate(['/family-list']);
       },
       error: (err) => console.error('Login failed', err),
     });

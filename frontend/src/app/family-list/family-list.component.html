@@ -1,0 +1,18 @@
+<p-card header="Choisir une famille">
+  <div class="p-fluid pt-6">
+    <div class="p-field">
+      <p-select
+        [options]="families"
+        [(ngModel)]="selectedFamilyId"
+        optionLabel="name"
+        optionValue="id"
+        [filter]="true"
+        placeholder="Choisir une famille"
+        class="w-full md:w-56"
+      />
+    </div>
+    <div class="mt-6 flex justify-content-center p-field col-12">
+      <p-button label="Suivant" (click)="goTree()"></p-button>
+    </div>
+  </div>
+</p-card>

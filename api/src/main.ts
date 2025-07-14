@@ -10,6 +10,7 @@ import relationshipRoutes from './routes/relationship.routes';
 import permissionRoutes from './routes/permission.routes';
 import userRoutes from './routes/user.routes';
 import shareRoutes from './routes/share.routes';
+import familyRoutes from './routes/family.routes';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use('/api/relationships', relationshipRoutes);
 app.use('/api/permissions', permissionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/share', shareRoutes);
+app.use('/api/families', familyRoutes);
 app.use(cors({ origin: 'http://localhost:4200' }));
 
 async function bootstrap() {

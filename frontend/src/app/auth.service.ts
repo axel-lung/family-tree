@@ -47,6 +47,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('selectedFamily');
     this.userSubject.next(null);
   }
 

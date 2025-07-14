@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User, Person, Relationship, Permission } from '@family-tree-workspace/shared-models';
+import { User, Person, Relationship, Permission, Family } from '@family-tree-workspace/shared-models';
 
 @Injectable({
   providedIn: 'root',
@@ -26,8 +26,8 @@ export class ApiService {
   }
 
   // Personnes
-  getPersons(): Observable<Person[]> {
-    return this.http.get<Person[]>(`${this.apiUrl}/persons`, { headers: this.getHeaders() });
+  getPersons(familyId: number): Observable<Person[]> {
+    return this.http.get<Person[]>(`${this.apiUrl}/persons/${familyId}`, { headers: this.getHeaders() });
   }
 
   getPerson(id: number): Observable<Person> {
@@ -53,5 +53,18 @@ export class ApiService {
 
   createRelationship(relationship: Partial<Relationship>): Observable<Relationship> {
     return this.http.post<Relationship>(`${this.apiUrl}/relationships`, relationship, { headers: this.getHeaders() });
+  }
+
+  // Family
+  getFamilies(): Observable<Family[]> {
+    return this.http.get<Family[]>(`${this.apiUrl}/families`, { headers: this.getHeaders() });
+  }
+
+  getFamily(id: number): Observable<Family> {
+    return this.http.get<Family>(`${this.apiUrl}/families/${id}`, { headers: this.getHeaders() });
+  }
+
+  createFamily(family: Partial<Family>): Observable<Family> {
+    return this.http.post<Family>(`${this.apiUrl}/families`, family, { headers: this.getHeaders() });
   }
 }

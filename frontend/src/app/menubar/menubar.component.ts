@@ -12,7 +12,9 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../auth.service';
 import { PermissionService } from '../permission.service';
-import { User } from '@family-tree-workspace/shared-models';
+import { Family, User } from '@family-tree-workspace/shared-models';
+import { FamilyService } from '../family.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-menubar',
@@ -55,12 +57,14 @@ export class MenubarComponent {
   user: User | null = null;
   items: MenuItem[] = [];
   isAuthenticated: boolean = false;
-
+  isFamilySelected: boolean = false;
+  familyName: string | undefined;
   constructor(
     private permissionService: PermissionService,
     private authService: AuthService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private familyService: FamilyService
   ) {
     this.authService.getUser().subscribe((user) => {
       this.isAuthenticated = !!user;
@@ -77,8 +81,14 @@ export class MenubarComponent {
       this.user = user;
     });
 
+    this.familyService.getSelectedFamily().subscribe((family) => {
+      this.familyName = family?.name;
+    });
+
+    console.log(this.familyName);
+
     this.items.push({
-      label: 'Arbre généalogique LUNG',
+      label: `Arbre généalogique ${this.familyName}`,
       icon: 'pi pi-home',
       routerLink: ['/tree'],
     });
@@ -96,6 +106,14 @@ export class MenubarComponent {
         label: 'Ajouter une relation',
         icon: 'pi pi-link',
         routerLink: ['/relationship-form'],
+      });
+    }
+
+    if (this.user?.role === 'admin') {
+      this.items.push({
+        label: 'Ajouter une famille',
+        icon: 'pi pi-link',
+        routerLink: ['/family-form'],
       });
     }
 

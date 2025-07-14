@@ -1,0 +1,13 @@
+<p-card header="Choisir la famille" class="flex justify-content-center">
+  <div class="grid p-fluid pt-6">
+    <div class="p-field col-6">
+      <p-fieldset legend="Nom">
+        <input id="name" pInputText [(ngModel)]="family.name" />
+      </p-fieldset>
+    </div>
+    <div class="mt-6 flex justify-content-center p-field col-12">
+      <p-button class="mr-4" label="Annuler" variant="text" severity="danger" (click)="goBack()" />
+      <p-button label="Enregistrer" (click)="save()"></p-button>
+    </div>
+  </div>
+</p-card>

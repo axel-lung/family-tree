@@ -19,6 +19,7 @@ export interface Person {
   residence?: string;
   photo_url?: string;
   deleted: boolean;
+  family_id: number;
 }
 
 export interface Relationship {
@@ -35,4 +36,9 @@ export interface Permission {
   can_create: boolean;
   can_update: boolean;
   can_delete: boolean;
+}
+
+export interface Family {
+  id: number;
+  name: string;
 }

@@ -8,6 +8,8 @@ import { RelationshipFormComponent } from './relationship-form/relationship-form
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { ShareComponent } from './share/share.component';
 import { NgModule } from '@angular/core';
+import { FamilyFormComponent } from './family-form/family-form.component';
+import { FamilyListComponent } from './family-list/family-list.component';
 
 export const routes: Routes = [
   { path: 'login', component: AuthComponent },
@@ -16,6 +18,8 @@ export const routes: Routes = [
   { path: 'person-form', component: PersonFormComponent, canActivate: [AuthGuard] },
   { path: 'person-form/:id', component: PersonFormComponent, canActivate: [AuthGuard] },
   { path: 'relationship-form', component: RelationshipFormComponent, canActivate: [AuthGuard] },
+  { path: 'family-form', component: FamilyFormComponent, canActivate: [AuthGuard] },
+  { path: 'family-list', component: FamilyListComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard] },
   { path: 'share/:token', component: ShareComponent },
   { path: '', redirectTo: '/tree', pathMatch: 'full' },

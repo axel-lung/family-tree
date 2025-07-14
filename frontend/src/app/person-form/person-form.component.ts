@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FileUpload } from 'primeng/fileupload';
 import { FieldsetModule } from 'primeng/fieldset';
 import { Select } from 'primeng/select';
+import { FamilyService } from '../family.service';
 
 @Component({
   selector: 'app-person-form',
@@ -37,12 +38,14 @@ export class PersonFormComponent implements OnInit {
   constructor(
     private personFacade: PersonFacade,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private familyService: FamilyService
   ) {}
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     this.genders = ['M', 'F'];
+    this.familyService.getSelectedFamily().subscribe(f => this.person.family_id = f.id);
     if (id) {
       this.isEdit = true;
       this.personFacade.getPerson(Number(id)).subscribe((person) => {

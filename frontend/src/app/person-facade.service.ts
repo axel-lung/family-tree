@@ -14,9 +14,9 @@ export class PersonFacade {
 
   constructor(private apiService: ApiService) {}
 
-  getPersons(): Observable<Person[]> {
+  getPersons(familyId: number): Observable<Person[]> {
     if (!this.personsCache.value.length) {
-      return this.apiService.getPersons().pipe(
+      return this.apiService.getPersons(familyId).pipe(
         tap(persons => this.personsCache.next(persons))
       );
     }

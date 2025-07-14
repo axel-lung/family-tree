@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import { Person } from '../models/person';
-import { authenticateJWT } from '../middleware/jwt.middleware';
 
 export const getPersons = async (req: Request, res: Response) => {
   try {
-    const persons = await Person.findAll({ where: { deleted: false } });
+    console.log(req);
+    
+    const persons = await Person.findAll({ where: { deleted: false, family_id: req.params.familyId } });
     res.json(persons);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch persons' });

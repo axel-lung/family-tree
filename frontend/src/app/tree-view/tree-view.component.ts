@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { PersonFacade } from '../person-facade.service';
 import { Router } from '@angular/router';
 import f3 from 'family-chart';
+import { FamilyService } from '../family.service';
+import { Family } from '@family-tree-workspace/shared-models';
 
 @Component({
   selector: 'app-tree-view',
@@ -20,17 +22,27 @@ import f3 from 'family-chart';
         width: 100%;
         height: 100%;
       }
-      
     `,
   ],
 })
 export class TreeViewComponent implements OnInit {
-  constructor(private personFacade: PersonFacade, private router: Router) {}
+
+  family: Family = {id: 0, name: ""};
+
+  constructor(
+    private personFacade: PersonFacade,
+    private router: Router,
+    private familyService: FamilyService
+  ) {}
 
   ngOnInit() {
-    this.personFacade.getPersons().subscribe((persons) => {
+    this.familyService.getSelectedFamily().subscribe(f => this.family = f);
+    this.personFacade.getPersons(this.family.id).subscribe((persons) => {
       this.personFacade.getRelationships().subscribe((relationships) => {
         let data: any = [];
+
+        console.log(persons);
+        
 
         persons.forEach((person) => {
           const spouseRel = relationships.filter(

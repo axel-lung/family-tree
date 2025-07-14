@@ -17,13 +17,23 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3333;
 
-// Configurer CORS pour autoriser les requêtes depuis le frontend
+// Configuration CORS
+const allowedOrigins = [
+  'http://localhost',
+  'http://localhost:4200',
+  process.env.FRONTEND_URL || 'http://localhost', // URL en production, par ex. 'https://family-tree.example.com'
+];
+
 app.use(
   cors({
-    origin: 'http://localhost:4200', // Autoriser uniquement cette origine
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Méthodes HTTP autorisées
-    allowedHeaders: ['Content-Type', 'Authorization'], // En-têtes autorisés
-    credentials: true, // Autoriser les cookies (si nécessaire, pour HttpOnly plus tard)
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
   })
 );
 
@@ -36,7 +46,6 @@ app.use('/api/permissions', permissionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/share', shareRoutes);
 app.use('/api/families', familyRoutes);
-app.use(cors({ origin: 'http://localhost:4200' }));
 
 async function bootstrap() {
   try {

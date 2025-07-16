@@ -10,7 +10,7 @@ ARG API_URL
 ENV API_URL=${API_URL}
 
 # Remplace la valeur dans le fichier d'environnement Angular
-RUN sed -i "s|API_URL_PLACEHOLDER|${API_URL}|g" app/environments/environment.prod.ts
+RUN sed -i "s|API_URL_PLACEHOLDER|${API_URL}|g" frontend/src/app/environments/environment.prod.ts
 
 RUN npx nx build frontend --configuration=production
 

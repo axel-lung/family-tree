@@ -46,15 +46,15 @@ jobs:
           mv private_key ~/.ssh/id_rsa
 
           echo "Test SSH 1"
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion OK 1'" || echo "Échec SSH 1"
+          ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion OK 1'" || echo "Échec SSH 1"
 
           ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
 
           echo "Test SSH 2"
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion OK 2'" || echo "Échec SSH 2"
+          ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion OK 2'" || echo "Échec SSH 2"
 
           echo "Créer le dossier et fichier .env distant"
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST \
+          ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST \
             "mkdir -p /opt/family-tree && \
             echo 'DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME' > /opt/family-tree/.env && \
             echo 'JWT_SECRET=$JWT_SECRET' >> /opt/family-tree/.env && \
@@ -62,10 +62,10 @@ jobs:
             echo 'DB_PASSWORD=$DB_PASSWORD' >> /opt/family-tree/.env"
 
           echo "Transfert de docker-compose.yml"
-          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
+          scp -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
 
           echo "Déploiement Docker"
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
+          ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
             set -x
             cd /opt/family-tree
             docker-compose pull

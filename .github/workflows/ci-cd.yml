@@ -62,8 +62,8 @@ jobs:
             echo 'DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME' > /opt/family-tree/.env && \
             echo 'JWT_SECRET=$JWT_SECRET' >> /opt/family-tree/.env && \
             echo 'DB_USER=$DB_USER' >> /opt/family-tree/.env && \
-            echo 'DB_PASSWORD=$DB_PASSWORD' >> /opt/family-tree/.env"
-            echo 'DB_NAME=$DB_NAME' >> /opt/family-tree/.env
+            echo 'DB_PASSWORD=$DB_PASSWORD' >> /opt/family-tree/.env" && \
+            echo 'DB_NAME=$DB_NAME' >> /opt/family-tree/.env && \
             echo 'DB_HOST=$DB_HOST' >> /opt/family-tree/.env
 
           echo "Transfert de docker-compose.yml"

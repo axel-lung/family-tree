@@ -19,14 +19,14 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: apps/frontend/Dockerfile
+          file: frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/family-tree-frontend:latest
       - name: Build and push backend
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: apps/api/Dockerfile
+          file: api/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/family-tree-backend:latest
       - name: Deploy to server
@@ -48,13 +48,13 @@ jobs:
           ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
 
           # Copier docker-compose.yml et .env
-          ssh $SSH_USER@$SSH_HOST "mkdir -p ~/family-tree && echo 'DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME' > ~/family-tree/.env && echo 'JWT_SECRET=$JWT_SECRET' >> ~/family-tree/.env && echo 'DB_USER=$DB_USER' >> ~/family-tree/.env && echo 'DB_PASSWORD=$DB_PASSWORD' >> ~/family-tree/.env && echo 'DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD' >> ~/family-tree/.env"
-          scp docker-compose.yml $SSH_USER@$SSH_HOST:~/family-tree/docker-compose.yml
-          scp apps/api/src/init-db.sql $SSH_USER@$SSH_HOST:~/family-tree/init-db.sql
+          ssh $SSH_USER@$SSH_HOST "mkdir -p /opt/family-tree && echo 'DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME' > /opt/family-tree/.env && echo 'JWT_SECRET=$JWT_SECRET' >> /opt/family-tree/.env && echo 'DB_USER=$DB_USER' >> /opt/family-tree/.env && echo 'DB_PASSWORD=$DB_PASSWORD' >> /opt/family-tree/.env && echo 'DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD' >> /opt/family-tree/.env"
+          scp docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
+          scp api/src/init-db.sql $SSH_USER@$SSH_HOST:/opt/family-tree/init-db.sql
 
           # Déployer sur le serveur
           ssh $SSH_USER@$SSH_HOST << 'EOF'
-            cd ~/family-tree
+            cd /opt/family-tree
             docker-compose pull
             docker-compose up -d
           EOF

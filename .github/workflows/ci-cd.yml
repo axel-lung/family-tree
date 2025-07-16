@@ -38,7 +38,6 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
         run: |
           # Installer SSH
           echo "$SSH_PRIVATE_KEY" > private_key
@@ -48,9 +47,8 @@ jobs:
           ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
 
           # Copier docker-compose.yml et .env
-          ssh $SSH_USER@$SSH_HOST "mkdir -p /opt/family-tree && echo 'DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME' > /opt/family-tree/.env && echo 'JWT_SECRET=$JWT_SECRET' >> /opt/family-tree/.env && echo 'DB_USER=$DB_USER' >> /opt/family-tree/.env && echo 'DB_PASSWORD=$DB_PASSWORD' >> /opt/family-tree/.env && echo 'DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD' >> /opt/family-tree/.env"
+          ssh $SSH_USER@$SSH_HOST "mkdir -p /opt/family-tree && echo 'DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME' > /opt/family-tree/.env && echo 'JWT_SECRET=$JWT_SECRET' >> /opt/family-tree/.env && echo 'DB_USER=$DB_USER' >> /opt/family-tree/.env && echo 'DB_PASSWORD=$DB_PASSWORD' >> /opt/family-tree/.env"
           scp docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
-          scp api/src/init-db.sql $SSH_USER@$SSH_HOST:/opt/family-tree/init-db.sql
 
           # Déployer sur le serveur
           ssh $SSH_USER@$SSH_HOST << 'EOF'

@@ -32,6 +32,8 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
       - REDIS_URL=redis://redis:6379
+    networks:
+      - traefik
 
   redis:
     image: redis:alpine

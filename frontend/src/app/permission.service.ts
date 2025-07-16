@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Permission } from '@family-tree-workspace/shared-models';
+import { environment } from './environments/environement.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PermissionService {
-  private apiUrl = 'http://localhost:3333/api';
+  private apiUrl = environment.apiUrl + '/api';
 
   constructor(private http: HttpClient) {}
 

@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User, Person, Relationship, Permission, Family } from '@family-tree-workspace/shared-models';
+import { environment } from './environments/environement.prod';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:3333/api';
+  private apiUrl = environment.apiUrl+'/api';
 
   constructor(private http: HttpClient) {}
 

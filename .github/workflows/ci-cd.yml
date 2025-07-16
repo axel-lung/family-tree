@@ -63,7 +63,7 @@ jobs:
             echo 'DB_PASSWORD=$DB_PASSWORD' >> /opt/family-tree/.env"
 
           echo "Transfert de docker-compose.yml"
-          scp -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
+          scp -P $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
 
           echo "Déploiement Docker"
           ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'

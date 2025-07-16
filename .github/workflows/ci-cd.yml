@@ -40,19 +40,27 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           set -x 
-          # Installer SSH
           echo "$SSH_PRIVATE_KEY" > private_key
           chmod 600 private_key
           mkdir -p ~/.ssh
           mv private_key ~/.ssh/id_rsa
+
           ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
 
-          # Copier docker-compose.yml et .env
-          ssh $SSH_USER@$SSH_HOST "mkdir -p /opt/family-tree && echo 'DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME' > /opt/family-tree/.env && echo 'JWT_SECRET=$JWT_SECRET' >> /opt/family-tree/.env && echo 'DB_USER=$DB_USER' >> /opt/family-tree/.env && echo 'DB_PASSWORD=$DB_PASSWORD' >> /opt/family-tree/.env"
-          scp docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
+          echo "Créer le dossier et fichier .env distant"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST \
+            "mkdir -p /opt/family-tree && \
+            echo 'DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME' > /opt/family-tree/.env && \
+            echo 'JWT_SECRET=$JWT_SECRET' >> /opt/family-tree/.env && \
+            echo 'DB_USER=$DB_USER' >> /opt/family-tree/.env && \
+            echo 'DB_PASSWORD=$DB_PASSWORD' >> /opt/family-tree/.env"
 
-          # Déployer sur le serveur
-          ssh $SSH_USER@$SSH_HOST << 'EOF'
+          echo "Transfert de docker-compose.yml"
+          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
+
+          echo "Déploiement Docker"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
+            set -x
             cd /opt/family-tree
             docker-compose pull
             docker-compose up -d

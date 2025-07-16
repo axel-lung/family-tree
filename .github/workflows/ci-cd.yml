@@ -61,6 +61,8 @@ jobs:
             echo 'JWT_SECRET=$JWT_SECRET' >> /opt/family-tree/.env && \
             echo 'DB_USER=$DB_USER' >> /opt/family-tree/.env && \
             echo 'DB_PASSWORD=$DB_PASSWORD' >> /opt/family-tree/.env"
+            echo 'DB_NAME=$DB_NAME' >> /opt/family-tree/.env
+            echo 'DB_HOST=$DB_HOST' >> /opt/family-tree/.env
 
           echo "Transfert de docker-compose.yml"
           scp -P $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
@@ -69,6 +71,6 @@ jobs:
           ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
             set -x
             cd /opt/family-tree
-            docker-compose pull
-            docker-compose up -d
+            docker compose pull
+            docker compose up -d
           EOF

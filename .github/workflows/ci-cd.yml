@@ -61,6 +61,9 @@ jobs:
             echo 'DB_HOST=$DB_HOST' >> /opt/family-tree/.env && \
             echo 'DB_PASSWORD=\"$DB_PASSWORD\"' >> /opt/family-tree/.env"
 
+          cd /opt/family-tree
+          docker compose down
+
           echo "Transfert de docker-compose.yml"
           scp -P $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
 

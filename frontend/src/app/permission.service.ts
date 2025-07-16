@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Permission } from '@family-tree-workspace/shared-models';
-import { environment } from './environments/environement.prod';
+import { environment } from './environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',

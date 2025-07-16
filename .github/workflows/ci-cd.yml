@@ -49,7 +49,7 @@ jobs:
           echo "Test SSH 1"
           ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion OK 1'" || echo "Échec SSH 1"
 
-          ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
+          ssh-keyscan -p $SSH_PORT -H $SSH_HOST >> ~/.ssh/known_hosts
 
           echo "Test SSH 2"
           ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion OK 2'" || echo "Échec SSH 2"

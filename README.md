@@ -1,90 +1,82 @@
-# FamilyTreeWorkspace
+# Application d’arbre généalogique
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## Aperçu
+L’application d’arbre généalogique est une plateforme web permettant de créer, visualiser et gérer des arbres généalogiques familiaux. Elle offre des fonctionnalités pour ajouter des personnes, des relations, gérer les permissions des utilisateurs, et partager des fiches de manière sécurisée via des liens temporaires. L’application est construite avec un frontend Angular, un backend Node.js/Express, une base de données MySQL, et Redis pour le cache. Elle utilise une architecture monorepo avec Nx et PrimeNG pour l’interface utilisateur.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+### Fonctionnalités principales
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+- Visualisation de l’arbre : Affiche les relations familiales (parents, enfants, conjoints) dans une interface interactive.
+- Gestion des personnes : Ajout, modification, et suppression (soft delete) de fiches de personnes.
+- Gestion des relations : Création de liens familiaux (parent, enfant, conjoint).
+- Permissions basées sur les rôles (RBAC) : Trois rôles (admin, family_member, guest) avec des permissions spécifiques (can_create, can_update, can_delete).
+- Panneau d’administration : Gestion des utilisateurs et permissions (réservé aux admins).
+- Partage sécurisé : Génération de liens temporaires (24h) pour partager des fiches sans données sensibles.
+- Authentification sécurisée : Connexion/déconnexion avec JWT.
+- Déploiement Docker : Conteneurisation du frontend, backend, MySQL, et Redis.
 
-## Finish your CI setup
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/NMYmvTVmrZ)
+## Prérequis
+- Node.js : Version 18.x
+- Docker et Docker Compose : Pour exécuter l’application en conteneurs
+- MySQL : Version 8.0
+- Redis : Version alpine
+- Git : Pour cloner le repository
+- Compte Docker Hub : Pour tirer/pousser les images (optionnel)
+- Serveur Linux : Pour le déploiement (avec SSH et accès root)
 
+## Installation
+### 1. Cloner le repository
 
-## Generate a library
-
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+```bash
+git clone https://github.com/ton-utilisateur/ton-repo.git
+cd ton-repo
 ```
 
-## Run tasks
+### 2. Installer les dépendances
 
-To build the library use:
-
-```sh
-npx nx build pkg1
-```
-
-To run any task with Nx use:
-
-```sh
-npx nx <target> <project-name>
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Versioning and releasing
-
-To version and release the library use
+```bash
+npm install
 
 ```
-npx nx release
+
+### 3. Configurer les variables d’environnement
+
+Créez un fichier ```.env``` à la racine du projet avec les variables suivantes :
+
+```env
+JWT_SECRET=ton_secret_jwt_ici
+DB_USER=family_tree_user
+DB_HOST=ip_serveur_mysql
+DB_PASSWORD=ton_mot_de_passe_mysql
+DB_ROOT_PASSWORD=ton_mot_de_passe_root_mysql
+DOCKERHUB_USERNAME=ton-utilisateur
+FRONTEND_URL=http://localhost
 ```
+Note : Remplacez les valeurs par celles adaptées à votre environnement. En production, utilisez l’URL de votre serveur (par exemple, ```https://family-tree.example.com```).
 
-Pass `--dry-run` to see what would happen without actually releasing the library.
 
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Exécution locale avec Docker
 
-## Keep TypeScript project references up to date
+1. Lancez les services (frontend, backend, MySQL, Redis) :
 
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
+```docker-compose up --build```
 
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
+2. Accédez à l’application :
+- Frontend : http://localhost
+- Backend : http://localhost:3333/api
 
-```sh
-npx nx sync
+Pour arrêter les conteneurs :
+
+```docker-compose down```
+
+## Structure du projet
+```plain
+ton-repo/
+├── apps/
+│   ├── api/                # Backend Node.js/Express
+│   └── frontend/           # Frontend Angular
+├── docs/                   # Documentation (admin-guide.md, member-guide.md)
+├── .env                    # Variables d’environnement
+├── docker-compose.yml      # Configuration Docker
+└── README.md               # Ce fichier
 ```
-
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
-
-```sh
-npx nx sync:check
-```
-
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
-
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)

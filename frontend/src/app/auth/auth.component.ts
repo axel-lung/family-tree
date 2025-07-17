@@ -21,7 +21,7 @@ import { FieldsetModule } from 'primeng/fieldset';
     FieldsetModule
   ],
   template: `
-    <p-card header="Authentification" class="flex justify-content-center">
+    <p-card header="Mes origines de famille" class="flex justify-content-center">
       <div class="p-fluid">
         <div class="p-field col-3">
           <p-fieldset legend="Email">

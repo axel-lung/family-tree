@@ -14,12 +14,19 @@ services:
     depends_on:
       - backend
     environment:
-      - API_URL=http://backend:3333/api
+      - API_URL=https://mesoriginesdefamille.alng.fr/api
     networks:
       - traefik
 
   backend:
     image: ${DOCKERHUB_USERNAME}/family-tree-backend:latest
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.backend.rule=Host(`mesoriginesdefamille.alng.fr`) && PathPrefix(`/api`)"
+        - "traefik.http.routers.backend.entrypoints=websecure"
+        - "traefik.http.routers.backend.tls=true"
+        - "traefik.http.routers.backend.tls.certresolver=myresolver"
+        - "traefik.http.services.backend.loadbalancer.server.port=3333"
     ports:
       - '3333:3333'
     depends_on:
@@ -39,6 +46,8 @@ services:
     image: redis:alpine
     ports:
       - '6379:6379'
+    networks:
+      - traefik
 
 networks:
   traefik:

@@ -12,13 +12,13 @@ services:
     # ports:
     #   - '80:80'
     depends_on:
-      - backend
+      - familytreeapi
     environment:
       - API_URL=https://mesoriginesdefamille.alng.fr/api
     networks:
       - traefik
 
-  backend:
+  familytreeapi:
     image: ${DOCKERHUB_USERNAME}/family-tree-backend:latest
     labels:
         - "traefik.enable=true"

@@ -24,6 +24,9 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
 ];
 
+console.log(allowedOrigins);
+
+
 app.use(
   cors({
     origin: (origin, callback) => {

@@ -51,7 +51,6 @@ app.use('/api/share', shareRoutes);
 app.use('/api/families', familyRoutes);
 
 async function bootstrap() {
-  console.log(allowedOrigins);
   try {
     await sequelize.authenticate();
     console.log('Database connection established');

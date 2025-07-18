@@ -9,7 +9,7 @@ import { environment } from './environments/environment.prod';
   providedIn: 'root',
 })
 export class PermissionService {
-  private apiUrl = environment.apiUrl + '/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

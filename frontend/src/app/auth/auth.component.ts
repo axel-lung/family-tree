@@ -34,6 +34,8 @@ import { FieldsetModule } from 'primeng/fieldset';
           </p-fieldset>
         </div>
         <p-button class="flex justify-content-center" label="Connexion" (click)="login()"></p-button>
+                <p-button class="flex justify-content-center" label="Connexion" (click)="login()"></p-button>
+
       </div>
     </p-card>
   `,

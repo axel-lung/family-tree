@@ -21,7 +21,7 @@ const port = process.env.PORT || 3333;
 const allowedOrigins = [
   'http://localhost',
   'http://localhost:4200',
-  process.env.FRONTEND_URL || 'http://localhost', // URL en production, par ex. 'https://family-tree.example.com'
+  process.env.FRONTEND_URL,
 ];
 
 app.use(

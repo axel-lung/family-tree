@@ -44,7 +44,14 @@ services:
     networks:
       - familytreenet
 
-  
+  alpine-terminal:
+    image: alpine:latest
+    container_name: alpine-terminal
+    command: /bin/sh
+    stdin_open: true
+    tty: true
+    networks:
+      - familytreenet
 
 networks:
   traefik:

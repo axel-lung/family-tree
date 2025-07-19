@@ -24,9 +24,6 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
 ];
 
-
-
-
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -58,9 +55,9 @@ async function bootstrap() {
     initModels(); // Initialiser les relations
     await sequelize.sync({ force: false }); // Force: true pour développement, à retirer en production
     console.log('Database synced');
-    app.listen(port, () => {
-      console.log(`Server running on http://localhost:${port}`);
-    });
+    app.listen(3333, '0.0.0.0', () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
   } catch (error) {
     console.error('Failed to start server:', error);
   }

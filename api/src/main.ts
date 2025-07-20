@@ -51,7 +51,7 @@ async function bootstrap() {
   try {
     await sequelize.authenticate();
     console.log('Database connection established');
-    await redisClient.connect();
+    // await redisClient.connect();
     initModels(); // Initialiser les relations
     await sequelize.sync({ force: false }); // Force: true pour développement, à retirer en production
     console.log('Database synced');

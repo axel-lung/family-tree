@@ -21,8 +21,15 @@ services:
 
   familytreeapi:
     image: ${DOCKERHUB_USERNAME}/family-tree-backend:latest
-    ports:
-      - '3333:3333'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.family-tree-api.rule=Host(`mesoriginesdefamille.alng.fr`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.family-tree-api.entrypoints=websecure" # Utilise HTTPS
+      - "traefik.http.routers.family-tree-api.tls=true" # Active TLS
+      - "traefik.http.routers.family-tree-api.tls.certresolver=myresolver" # Utilise le resolver Let's Encrypt
+      - "traefik.http.services.family-tree-api.loadbalancer.server.port=3333" # Port interne de WordPress
+    # ports:
+    #   - '3333:3333'
     depends_on:
       - redis
     environment:

@@ -21,11 +21,11 @@ services:
     image: ${DOCKERHUB_USERNAME}/family-tree-backend:latest
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.family-tree.rule=Host(`mesoriginesdefamille.alng.fr`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.family-tree.entrypoints=websecure"
-      - "traefik.http.routers.family-tree.tls=true"
-      - "traefik.http.routers.family-tree.tls.certresolver=myresolver"
-      - "traefik.http.services.family-tree.loadbalancer.server.port=3333"
+      - "traefik.http.routers.family-tree-api.rule=Host(`mesoriginesdefamille.alng.fr`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.family-tree-api.entrypoints=websecure"
+      - "traefik.http.routers.family-tree-api.tls=true"
+      - "traefik.http.routers.family-tree-api.tls.certresolver=myresolver"
+      - "traefik.http.services.family-tree-api.loadbalancer.server.port=3333"
     # depends_on:
     #   - redis
     environment:

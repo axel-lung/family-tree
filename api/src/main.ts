@@ -15,7 +15,7 @@ import familyRoutes from './routes/family.routes';
 dotenv.config();
 
 const app = express();
-const port: number = parseInt(process.env.PORT!);
+const port: number = 3333;
 if (!port) {
   throw new Error('PORT environment variable is not set or not a valid number');
 }

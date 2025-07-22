@@ -8,54 +8,46 @@ import { ApiService } from '../api.service';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { FieldsetModule } from 'primeng/fieldset';
-import { environment } from '../environments/environment';
-
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  styleUrl: 'auth.component.css',
   imports: [
     CommonModule,
     FormsModule,
     InputTextModule,
     ButtonModule,
     CardModule,
-    FieldsetModule,
+    FieldsetModule
   ],
-  templateUrl: 'auth.component.html',
+  template: `
+    <p-card header="Mes origines de famille" class="flex justify-content-center">
+      <div class="p-fluid">
+        <div class="p-field col-3">
+          <p-fieldset legend="Email">
+          <input id="email" pInputText [(ngModel)]="email" type="email" />
+          </p-fieldset>
+        </div>
+        <div class="p-field col-3">
+          <p-fieldset legend="Mot de passe">
+          <input id="password" pInputText [(ngModel)]="password" type="password" />
+          </p-fieldset>
+        </div>
+        <p-button class="flex justify-content-center" label="Connexion" (click)="register()"></p-button>
+      </div>
+    </p-card>
+  `,
 })
-export class AuthComponent {
+export class RegisterComponent {
   email: string = '';
   password: string = '';
   role: string = 'guest';
-  captchaToken: string = '';
 
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
     private router: Router
-  ) {
-    window.onCaptchaSuccess = (token: string) => {
-      this.captchaToken = token;
-    };
-  }
-
-  login() {
-    console.log(environment.production);
-    
-    if (!this.captchaToken && environment.production) {
-      console.error('Captcha non validé');
-      return;
-    }
-    this.apiService.login(this.email, this.password, this.captchaToken).subscribe({
-      next: (response) => {
-        this.authService.setUser(response.token);
-        this.router.navigate(['/family-list']);
-      },
-      error: (err) => console.error('Erreur lors de la connexion', err),
-    });
-  }
+  ) {}
 
   register() {
     this.apiService.register(this.email, this.password, this.role).subscribe({
@@ -65,11 +57,5 @@ export class AuthComponent {
       },
       error: (err) => console.error('Registration failed', err),
     });
-  }
-}
-
-declare global {
-  interface Window {
-    onCaptchaSuccess: (token: string) => void;
   }
 }

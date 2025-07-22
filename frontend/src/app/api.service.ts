@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User, Person, Relationship, Permission, Family } from '@family-tree-workspace/shared-models';
-import { environment } from './environments/environment.prod';
+import { environment } from './environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl: string = environment.apiUrl;
+  
+  
 
   constructor(private http: HttpClient) {}
 
@@ -22,8 +24,8 @@ export class ApiService {
     return this.http.post(`${this.apiUrl}/auth/register`, { email, password, role });
   }
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, { email, password });
+  login(email: string, password: string, captchaToken: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/login`, { email, password, captchaToken });
   }
 
   // Personnes

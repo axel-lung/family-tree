@@ -1,1 +1,16 @@
-<p>auth works!</p>
+    <p-card [style]="{ width: '40%', overflow: 'hidden' }" header="Mes origines de famille" class="flex justify-content-center align-items-center h-screen">
+      <div class="p-fluid">
+        <div class="p-field col-12 mt-3">
+          <p-fieldset legend="Email">
+          <input class="w-full" id="email" pInputText [(ngModel)]="email" type="email" />
+          </p-fieldset>
+        </div>
+        <div class="p-field col-12 mb-5">
+          <p-fieldset legend="Mot de passe">
+          <input class="w-full" id="password" pInputText [(ngModel)]="password" type="password" />
+          </p-fieldset>
+        </div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAABlzlgQkHqL3WmTc" data-callback="onCaptchaSuccess" data-theme="light"></div>
+        <p-button class="flex justify-content-center" label="Connexion" (click)="login()"></p-button>
+      </div>
+    </p-card>

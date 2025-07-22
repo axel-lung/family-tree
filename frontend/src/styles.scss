@@ -6,6 +6,11 @@
   margin: 0;
 }
 
+body, app-root, app-auth{
+  height: 100vh;
+  display: block;
+}
+
 .f3 {
   --female-color: rgb(196, 138, 146);
   --male-color: rgb(120, 159, 172);

@@ -15,13 +15,15 @@ import familyRoutes from './routes/family.routes';
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3333;
+const port: number = parseInt(process.env.PORT);
+if (!port) {
+  throw new Error('PORT environment variable is not set or not a valid number');
+}
+
 
 // Configuration CORS
 const allowedOrigins = [
-  'http://localhost',
-  'http://localhost:4200',
-  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL!,
 ];
 
 app.use(
@@ -39,7 +41,6 @@ app.use(
 
 app.use(express.json());
 app.use('/api/auth', authRoutes);
-app.use('/api/auth', authRoutes);
 app.use('/api/persons', personRoutes);
 app.use('/api/relationships', relationshipRoutes);
 app.use('/api/permissions', permissionRoutes);
@@ -55,7 +56,7 @@ async function bootstrap() {
     initModels(); // Initialiser les relations
     await sequelize.sync({ force: false }); // Force: true pour développement, à retirer en production
     console.log('Database synced');
-    app.listen(3333, '0.0.0.0', () => {
+    app.listen(port, '0.0.0.0', () => {
   console.log(`Server running on http://localhost:${port}`);
 });
   } catch (error) {

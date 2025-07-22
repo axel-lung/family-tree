@@ -12,15 +12,20 @@ services:
     depends_on:
       - familytreeapi
     environment:
-      - API_URL=https://mesoriginesdefamille.alng.fr/api
+      - API_URL=http://mesoriginesdefamille.alng.fr/api
     networks:
       - traefik
       - familytreenet
 
   familytreeapi:
     image: ${DOCKERHUB_USERNAME}/family-tree-backend:latest
-    ports:
-      - '3333:3333'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.family-tree.rule=Host(`mesoriginesdefamille.alng.fr`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.family-tree.entrypoints=websecure"
+      - "traefik.http.routers.family-tree.tls=true"
+      - "traefik.http.routers.family-tree.tls.certresolver=myresolver"
+      - "traefik.http.services.family-tree.loadbalancer.server.port=3333"
     # depends_on:
     #   - redis
     environment:
@@ -33,6 +38,7 @@ services:
       - REDIS_URL=redis://redis:6379
       - FRONTEND_URL=${FRONTEND_URL}
     networks:
+      - traefik
       - familytreenet
 
   # redis:

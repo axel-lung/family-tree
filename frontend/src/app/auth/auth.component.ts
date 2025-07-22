@@ -48,6 +48,8 @@ export class AuthComponent {
       console.error('Captcha non validé');
       return;
     }
+    console.log("connexion en cours");
+    
     this.apiService.login(this.email, this.password, this.captchaToken).subscribe({
       next: (response) => {
         this.authService.setUser(response.token);

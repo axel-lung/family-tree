@@ -4,4 +4,4 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
 EXPOSE 3333
-CMD ["npx", "nx", "serve", "api"]
+CMD ["node", "dist/main.js"]

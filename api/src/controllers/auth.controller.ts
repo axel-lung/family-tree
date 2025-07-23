@@ -37,7 +37,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   const { email, password, captchaToken } = req.body;
-  const nodeEnvironment = process.env.NODE_ENV;
+  const nodeEnvironment = process.env.NODE_ENV!;
 
   if (!captchaToken && nodeEnvironment == 'production') {
     return res.status(420).json({ error: 'Captcha token is missing' });

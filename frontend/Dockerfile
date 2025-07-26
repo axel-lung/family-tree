@@ -1,6 +1,6 @@
 # Étape 1 : Construire l'application Angular
 FROM node:18-alpine AS build
-WORKDIR /
+WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .

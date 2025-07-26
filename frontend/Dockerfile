@@ -1,6 +1,6 @@
 # Étape 1 : Construire l'application Angular
 FROM node:18-alpine AS build
-WORKDIR /app
+WORKDIR /
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
@@ -19,7 +19,7 @@ RUN npx nx build frontend --configuration=production
 
 # Étape 2 : Servir avec Nginx
 FROM nginx:alpine
-COPY --from=build /app/dist/frontend /usr/share/nginx/html
+COPY --from=build /dist/frontend /usr/share/nginx/html
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

@@ -76,5 +76,7 @@ jobs:
             set -x
             cd /opt/family-tree
             docker compose pull
+            docker compose down --remove-orphans
             docker compose up -d
+            docker image prune -f
           EOF

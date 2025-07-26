@@ -1,7 +1,36 @@
 version: '3.8'
 services:
+  familytreeapi:
+    image: ${DOCKERHUB_USERNAME}/family-tree-backend:latest
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.family-tree-api.rule=Host(`mesoriginesdefamille.alng.fr`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.family-tree-api.entrypoints=websecure"
+      - "traefik.http.routers.family-tree-api.tls=true"
+      - "traefik.http.routers.family-tree-api.tls.certresolver=myresolver"
+      - "traefik.http.services.family-tree-api.loadbalancer.server.port=3333"
+    environment:
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - REDIS_URL=redis://redis:6379
+      - FRONTEND_URL=${FRONTEND_URL}
+      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
+    networks:
+      - traefik
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   frontend:
     image: ${DOCKERHUB_USERNAME}/family-tree-frontend:latest
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.family-tree.rule=Host(`mesoriginesdefamille.alng.fr`)"
@@ -15,32 +44,11 @@ services:
       - API_URL=http://mesoriginesdefamille.alng.fr/api
     networks:
       - traefik
-      - familytreenet
-
-  familytreeapi:
-    image: ${DOCKERHUB_USERNAME}/family-tree-backend:latest
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.family-tree-api.rule=Host(`mesoriginesdefamille.alng.fr`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.family-tree-api.entrypoints=websecure"
-      - "traefik.http.routers.family-tree-api.tls=true"
-      - "traefik.http.routers.family-tree-api.tls.certresolver=myresolver"
-      - "traefik.http.services.family-tree-api.loadbalancer.server.port=3333"
-    # depends_on:
-    #   - redis
-    environment:
-      - NODE_ENV=production
-      - JWT_SECRET=${JWT_SECRET}
-      - DB_HOST=${DB_HOST}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - REDIS_URL=redis://redis:6379
-      - FRONTEND_URL=${FRONTEND_URL}
-      - TURNSTILE_SECRET_KEY=${TURNSTILE_SECRET_KEY}
-    networks:
-      - traefik
-      - familytreenet
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   # redis:
   #   image: redis:alpine
@@ -59,5 +67,3 @@ networks:
   traefik:
     name: traefik
     external: true
-  familytreenet:
-    name: familytreenet

@@ -17,7 +17,7 @@ RUN npx nx build api --configuration=production
 
 # Étape 2 : exécution allégée
 FROM node:18-alpine
-WORKDIR /
+WORKDIR /app
 COPY --from=builder /api ./dist
 COPY --from=builder /node_modules ./node_modules
 COPY --from=builder /package.json ./

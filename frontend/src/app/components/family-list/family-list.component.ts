@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FamilyFacade } from '../family-facade.service';
+import { FamilyFacade } from '../../services/family-facade.service';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { Fieldset } from 'primeng/fieldset';
 import { ButtonModule } from 'primeng/button';
 import { Select } from 'primeng/select';
-import { FamilyService } from '../family.service';
+import { FamilyService } from '../../services/family.service';
 
 @Component({
   selector: 'app-family-list',

@@ -5,7 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { Select } from 'primeng/select';
 import { Router } from '@angular/router';
-import { FamilyFacade } from '../family-facade.service';
+import { FamilyFacade } from '../../services/family-facade.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Family } from '@family-tree-workspace/shared-models';

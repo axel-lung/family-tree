@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { ApiService } from '../api.service';
-import { AuthService } from '../auth.service';
+import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { FieldsetModule } from 'primeng/fieldset';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 
 @Component({

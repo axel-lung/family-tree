@@ -5,13 +5,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DatePickerModule } from 'primeng/datepicker';
-import { PersonFacade } from '../person-facade.service';
+import { PersonFacade } from '../../services/person-facade.service';
 import { Person } from '@family-tree-workspace/shared-models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FileUpload } from 'primeng/fileupload';
 import { FieldsetModule } from 'primeng/fieldset';
 import { Select } from 'primeng/select';
-import { FamilyService } from '../family.service';
+import { FamilyService } from '../../services/family.service';
 
 @Component({
   selector: 'app-person-form',

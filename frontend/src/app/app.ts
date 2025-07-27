@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NxWelcome } from './nx-welcome';
-import { MenubarComponent } from './menubar/menubar.component';
-import { AuthService } from './auth.service';
+import { MenubarComponent } from './components/menubar/menubar.component';
+import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
-import { FamilyService } from './family.service';
+import { FamilyService } from './services/family.service';
 
 @Component({
-  imports: [NxWelcome, RouterModule, MenubarComponent, CommonModule],
+  imports: [RouterModule, MenubarComponent, CommonModule],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',

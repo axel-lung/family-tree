@@ -4,13 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { PersonFacade } from '../person-facade.service';
+import { PersonFacade } from '../../services/person-facade.service';
 import { Family, Relationship } from '@family-tree-workspace/shared-models';
 import { Router } from '@angular/router';
 import { SelectModule } from 'primeng/select';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { FamilyService } from '../family.service';
+import { FamilyService } from '../../services/family.service';
 
 @Component({
   selector: 'app-relationship-form',

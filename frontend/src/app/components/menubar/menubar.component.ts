@@ -10,10 +10,10 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ButtonModule } from 'primeng/button';
-import { AuthService } from '../auth.service';
-import { PermissionService } from '../permission.service';
+import { AuthService } from '../../services/auth.service';
+import { PermissionService } from '../../services/permission.service';
 import { Family, User } from '@family-tree-workspace/shared-models';
-import { FamilyService } from '../family.service';
+import { FamilyService } from '../../services/family.service';
 import { Subscription } from 'rxjs';
 
 @Component({

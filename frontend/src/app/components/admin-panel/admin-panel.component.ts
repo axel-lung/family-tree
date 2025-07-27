@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule  } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
 import { User, Permission } from '@family-tree-workspace/shared-models';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';

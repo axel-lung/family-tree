@@ -1,10 +1,10 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PersonFacade } from '../person-facade.service';
 import { Router } from '@angular/router';
 import f3 from 'family-chart';
-import { FamilyService } from '../family.service';
 import { Family } from '@family-tree-workspace/shared-models';
+import { PersonFacade } from '../../services/person-facade.service';
+import { FamilyService } from '../../services/family.service';
 
 @Component({
   selector: 'app-tree-view',

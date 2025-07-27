@@ -1,15 +1,15 @@
 import { RouterModule, Routes } from '@angular/router';
-import { AuthComponent } from './auth/auth.component';
-import { TreeViewComponent } from './tree-view/tree-view.component';
-import { PersonDetailComponent } from './person-detail/person-detail.component';
-import { AuthGuard } from './auth.guard';
-import { PersonFormComponent } from './person-form/person-form.component';
-import { RelationshipFormComponent } from './relationship-form/relationship-form.component';
-import { AdminPanelComponent } from './admin-panel/admin-panel.component';
-import { ShareComponent } from './share/share.component';
+import { AuthComponent } from '../components/auth/auth.component';
+import { PersonDetailComponent } from '../components/person-detail/person-detail.component';
+import { PersonFormComponent } from '../components/person-form/person-form.component';
+import { RelationshipFormComponent } from '../components/relationship-form/relationship-form.component';
+import { AdminPanelComponent } from '../components/admin-panel/admin-panel.component';
+import { ShareComponent } from '../components/share/share.component';
 import { NgModule } from '@angular/core';
-import { FamilyFormComponent } from './family-form/family-form.component';
-import { FamilyListComponent } from './family-list/family-list.component';
+import { FamilyFormComponent } from '../components/family-form/family-form.component';
+import { FamilyListComponent } from '../components/family-list/family-list.component';
+import { TreeViewComponent } from '../components/tree-view/tree-view.component';
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: 'login', component: AuthComponent },

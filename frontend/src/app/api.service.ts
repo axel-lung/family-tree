@@ -11,8 +11,9 @@ export class ApiService {
   private apiUrl: string = environment.apiUrl;
   
   
+  
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {console.log(this.apiUrl);}
 
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

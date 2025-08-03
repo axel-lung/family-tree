@@ -1,16 +1,29 @@
 import { Router } from 'express';
 import { register, login } from '../controllers/auth.controller';
 import rateLimit from 'express-rate-limit';
+import { validationResult } from 'express-validator';
+import { loginValidation, registerValidation } from '../middleware/validation.middleware';
+import { formatValidationErrors } from '../utils/formatValidationErrors'; 
 
 const router = Router();
-const loginLimiter = rateLimit({
+
+// Limiteur pour éviter le brute force
+const postLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 5, // 5 tentatives max par IP
-  message: 'Trop de tentatives de connexion, réessayez plus tard.',
+  max: 5,
+  message: 'Trop de tentatives, réessayez plus tard.',
 });
 
-router.post('/register', register);
-router.post('/login', login);
-router.post('/api/login', loginLimiter, login);
+router.post('/register', postLimiter, registerValidation, (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: formatValidationErrors(errors) });
+  }
+  register(req, res);
+});
+
+router.post('/login', postLimiter, loginValidation, (req, res) => {
+  login(req, res);
+});
 
 export default router;

@@ -17,6 +17,16 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
+    first_name: {
+      type: DataTypes.STRING(255),
+      unique: true,
+      allowNull: false,
+    },
+    last_name: {
+      type: DataTypes.STRING(255),
+      unique: true,
+      allowNull: false,
+    },
     email: {
       type: DataTypes.STRING(255),
       unique: true,
@@ -30,6 +40,11 @@ User.init(
       type: DataTypes.ENUM('admin', 'family_member', 'guest'),
       defaultValue: 'guest',
       allowNull: false,
+    },
+    approved: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     },
     created_at: {
       type: DataTypes.DATE,

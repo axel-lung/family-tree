@@ -25,8 +25,11 @@ export class AuthService {
         }
         this.userSubject.next({
           id: decoded.id,
+          first_name: decoded.first_name,
+          last_name: decoded.last_name,
           email: '',
           role: decoded.role,
+          approved: decoded.approved
         });
       } catch (error) {
         console.error('Invalid token', error);
@@ -42,7 +45,7 @@ export class AuthService {
   setUser(token: string) {
     localStorage.setItem('token', token);
     const decoded: any = jwtDecode(token);
-    this.userSubject.next({ id: decoded.id, email: '', role: decoded.role });
+    this.userSubject.next({ id: decoded.id, first_name: decoded.first_name, last_name: decoded.last_name, email: '', role: decoded.role, approved: decoded.approved });
   }
 
   logout() {

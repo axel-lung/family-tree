@@ -9,9 +9,6 @@ import { environment } from '../environments/environment';
 })
 export class ApiService {
   private apiUrl: string = environment.apiUrl;
-  
-  
-  
 
   constructor(private http: HttpClient) {console.log(this.apiUrl);}
 
@@ -21,8 +18,8 @@ export class ApiService {
   }
 
   // Authentification
-  register(email: string, password: string, role: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/register`, { email, password, role });
+  register(email: string, password: string, role: string, first_name: string, last_name: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/register`, { email, password, role, first_name, last_name });
   }
 
   login(email: string, password: string, captchaToken: string): Observable<any> {

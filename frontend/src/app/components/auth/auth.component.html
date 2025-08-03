@@ -1,16 +1,114 @@
-    <p-card [style]="{ width: '40%', overflow: 'hidden' }" header="Mes origines de famille" class="flex justify-content-center align-items-center h-screen">
-      <div class="p-fluid">
-        <div class="p-field col-12 mt-3">
-          <p-fieldset legend="Email">
-          <input class="w-full" id="email" pInputText [(ngModel)]="email" type="email" />
-          </p-fieldset>
+<p-toast></p-toast>
+<p-card
+  [style]="{ width: '40%', overflow: 'hidden', background: 'none' }"
+  class="flex justify-content-center align-items-center h-screen"
+>
+  <p-tabs value="0">
+    <p-tablist>
+      <p-tab style="width: 50%" value="0">Se connecter</p-tab>
+      <p-tab style="width: 50%" value="1">Obtenir un accès</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        <div class="p-fluid">
+          <div class="p-field col-12 mt-3">
+            <p-fieldset legend="Email">
+              <input
+                class="w-full"
+                id="email"
+                pInputText
+                [(ngModel)]="email"
+                type="email"
+              />
+            </p-fieldset>
+          </div>
+          <div class="p-field col-12 mb-5">
+            <p-fieldset legend="Mot de passe">
+              <input
+                class="w-full"
+                id="password"
+                pInputText
+                [(ngModel)]="password"
+                type="password"
+              />
+            </p-fieldset>
+          </div>
+          <div
+            class="cf-turnstile"
+            data-sitekey="0x4AAAAAABlzlgQkHqL3WmTc"
+            data-callback="onCaptchaSuccess"
+            data-theme="light"
+          ></div>
+          <p-button
+            class="flex justify-content-center"
+            label="Connexion"
+            (click)="login()"
+          ></p-button>
         </div>
-        <div class="p-field col-12 mb-5">
-          <p-fieldset legend="Mot de passe">
-          <input class="w-full" id="password" pInputText [(ngModel)]="password" type="password" />
-          </p-fieldset>
+      </p-tabpanel>
+    </p-tabpanels>
+    <p-tabpanels>
+      <p-tabpanel value="1">
+        <div class="p-fluid">
+          <div class="col-12 mt-3 flex">
+            <div class="p-field col-6 p-0 pr-1">
+              <p-fieldset legend="Prénom">
+                <input
+                  class="w-full"
+                  id="first_name"
+                  pInputText
+                  [(ngModel)]="first_name"
+                  type="text"
+                />
+              </p-fieldset>
+            </div>
+            <div class="p-field col-6 p-0 pl-1">
+              <p-fieldset legend="Nom">
+                <input
+                  class="w-full"
+                  id="last_name"
+                  pInputText
+                  [(ngModel)]="last_name"
+                  type="text"
+                />
+              </p-fieldset>
+            </div>
+          </div>
+          <div class="p-field col-12 mt-3">
+            <p-fieldset legend="Email">
+              <input
+                class="w-full"
+                id="email"
+                pInputText
+                [(ngModel)]="email"
+                type="email"
+              />
+            </p-fieldset>
+          </div>
+          <div class="p-field col-12 mt-3 mb-5">
+            <p-fieldset legend="Mot de passe">
+              <input
+                class="w-full"
+                id="password"
+                pInputText
+                [(ngModel)]="password"
+                type="password"
+              />
+            </p-fieldset>
+          </div>
+          <div
+            class="cf-turnstile"
+            data-sitekey="0x4AAAAAABlzlgQkHqL3WmTc"
+            data-callback="onCaptchaSuccess"
+            data-theme="light"
+          ></div>
+          <p-button
+            class="flex justify-content-center"
+            label="Envoyer la demande"
+            (click)="register()"
+          ></p-button>
         </div>
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAABlzlgQkHqL3WmTc" data-callback="onCaptchaSuccess" data-theme="light"></div>
-        <p-button class="flex justify-content-center" label="Connexion" (click)="login()"></p-button>
-      </div>
-    </p-card>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</p-card>

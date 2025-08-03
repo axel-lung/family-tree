@@ -11,7 +11,7 @@ export const register = async (req: Request, res: Response) => {
     // Vérification Turnstile
     const turnstileSecret = process.env.TURNSTILE_SECRET_KEY!;
 
-    if (nodeEnvironment == 'production') {
+    // if (nodeEnvironment == 'production') {
       const ip = req.ip || req.connection.remoteAddress || '';
       const verificationResponse = await axios.post(
         'https://challenges.cloudflare.com/turnstile/v0/siteverify',
@@ -25,7 +25,7 @@ export const register = async (req: Request, res: Response) => {
       if (!verificationResponse.data.success) {
         return res.status(403).json({ error: 'Captcha verification failed' });
       }
-    }
+    // }
 
 
     // Vérifier si l'utilisateur existe déjà
@@ -63,7 +63,7 @@ export const login = async (req: Request, res: Response) => {
   const { email, password, captchaToken } = req.body;
   const nodeEnvironment = process.env.NODE_ENV!;
 
-  if (!captchaToken && nodeEnvironment == 'production') {
+  if (!captchaToken) {
     return res.status(420).json({ error: 'Captcha token is missing' });
   }
 
@@ -71,7 +71,7 @@ export const login = async (req: Request, res: Response) => {
     // Vérification Turnstile
     const turnstileSecret = process.env.TURNSTILE_SECRET_KEY!;
 
-    if (nodeEnvironment == 'production') {
+    // if (nodeEnvironment == 'production') {
       const ip = req.ip || req.connection.remoteAddress || '';
       const verificationResponse = await axios.post(
         'https://challenges.cloudflare.com/turnstile/v0/siteverify',
@@ -85,7 +85,7 @@ export const login = async (req: Request, res: Response) => {
       if (!verificationResponse.data.success) {
         return res.status(403).json({ error: 'Captcha verification failed' });
       }
-    }
+    // }
 
     // Authentification utilisateur
     const user = await User.findOne({ where: { email } });

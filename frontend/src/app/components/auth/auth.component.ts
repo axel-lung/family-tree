@@ -45,6 +45,12 @@ export class AuthComponent {
     private router: Router,
     private messageService: MessageService
   ) {
+    const script = document.createElement('script');
+    script.src =
+      'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onCaptchaLoaded';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
     window.onCaptchaSuccess = (token: string) => {
       this.captchaToken = token;
     };
@@ -53,7 +59,7 @@ export class AuthComponent {
   login() {
     this.formErrors = {};
 
-    if (!this.captchaToken && environment.production) {
+    if (!this.captchaToken) {
       console.error('Captcha non validé');
       return;
     }
@@ -67,7 +73,7 @@ export class AuthComponent {
         },
         error: (err) => {
           console.log(err);
-          
+
           this.messageService.add({
             severity: 'error',
             summary: 'Erreur',
@@ -80,17 +86,18 @@ export class AuthComponent {
   register() {
     this.formErrors = {};
 
-    if (!this.captchaToken && environment.production) {
+    if (!this.captchaToken) {
       console.error('Captcha non validé');
       return;
     }
 
     if (!this.isPasswordValid(this.password)) {
       this.messageService.add({
-            severity: 'error',
-            summary: 'Erreur',
-            detail: "Le mot de passe doit contenir au moins 8 caractères, dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.",
-          });
+        severity: 'error',
+        summary: 'Erreur',
+        detail:
+          'Le mot de passe doit contenir au moins 8 caractères, dont 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial.',
+      });
       return;
     }
 

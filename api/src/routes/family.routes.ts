@@ -8,7 +8,7 @@ import {
 
 const router = Router();
 
-router.get('/', authenticateJWT, restrictToAdmin, getFamilies);
-router.get('/:id', authenticateJWT, restrictToAdmin, getFamily);
+router.get('/', authenticateJWT, getFamilies);
+router.get('/:id', authenticateJWT, getFamily);
 router.post('/', authenticateJWT, restrictToAdmin, createFamily);
 export default router;

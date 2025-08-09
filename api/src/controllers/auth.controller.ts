@@ -5,28 +5,26 @@ import { User } from '../models/user';
 import axios from 'axios';
 
 export const register = async (req: Request, res: Response) => {
-  const { email, password, role, captchaToken, first_name, last_name } = req.body;
+  const { email, password, role, captchaToken, first_name, last_name } =
+    req.body;
   const nodeEnvironment = process.env.NODE_ENV!;
   try {
     // Vérification Turnstile
     const turnstileSecret = process.env.TURNSTILE_SECRET_KEY!;
 
-    // if (nodeEnvironment == 'production') {
-      const ip = req.ip || req.connection.remoteAddress || '';
-      const verificationResponse = await axios.post(
-        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-        new URLSearchParams({
-          secret: turnstileSecret,
-          response: captchaToken,
-          remoteip: ip,
-        })
-      );
+    const ip = req.ip || req.connection.remoteAddress || '';
+    const verificationResponse = await axios.post(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      new URLSearchParams({
+        secret: turnstileSecret,
+        response: captchaToken,
+        remoteip: ip,
+      })
+    );
 
-      if (!verificationResponse.data.success) {
-        return res.status(403).json({ error: 'Captcha verification failed' });
-      }
-    // }
-
+    if (!verificationResponse.data.success) {
+      return res.status(403).json({ error: 'Captcha verification failed' });
+    }
 
     // Vérifier si l'utilisateur existe déjà
     const existingUser = await User.findOne({ where: { email } });
@@ -41,7 +39,7 @@ export const register = async (req: Request, res: Response) => {
       email,
       password: hashedPassword,
       role: role || 'guest',
-      approved: 0
+      approved: 0,
     });
 
     const token = jwt.sign(
@@ -71,21 +69,19 @@ export const login = async (req: Request, res: Response) => {
     // Vérification Turnstile
     const turnstileSecret = process.env.TURNSTILE_SECRET_KEY!;
 
-    // if (nodeEnvironment == 'production') {
-      const ip = req.ip || req.connection.remoteAddress || '';
-      const verificationResponse = await axios.post(
-        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-        new URLSearchParams({
-          secret: turnstileSecret,
-          response: captchaToken,
-          remoteip: ip,
-        })
-      );
+    const ip = req.ip || req.connection.remoteAddress || '';
+    const verificationResponse = await axios.post(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      new URLSearchParams({
+        secret: turnstileSecret,
+        response: captchaToken,
+        remoteip: ip,
+      })
+    );
 
-      if (!verificationResponse.data.success) {
-        return res.status(403).json({ error: 'Captcha verification failed' });
-      }
-    // }
+    if (!verificationResponse.data.success) {
+      return res.status(403).json({ error: 'Captcha verification failed' });
+    }
 
     // Authentification utilisateur
     const user = await User.findOne({ where: { email } });

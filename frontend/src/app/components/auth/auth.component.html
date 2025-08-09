@@ -19,6 +19,7 @@
                 pInputText
                 [(ngModel)]="email"
                 type="email"
+                (keydown.enter)="login()"
               />
             </p-fieldset>
           </div>
@@ -30,6 +31,7 @@
                 pInputText
                 [(ngModel)]="password"
                 type="password"
+                (keydown.enter)="login()"
               />
             </p-fieldset>
           </div>
@@ -59,6 +61,7 @@
                   pInputText
                   [(ngModel)]="first_name"
                   type="text"
+                  (keydown.enter)="register()"
                 />
               </p-fieldset>
             </div>
@@ -70,6 +73,7 @@
                   pInputText
                   [(ngModel)]="last_name"
                   type="text"
+                  (keydown.enter)="register()"
                 />
               </p-fieldset>
             </div>
@@ -82,6 +86,7 @@
                 pInputText
                 [(ngModel)]="email"
                 type="email"
+                (keydown.enter)="register()"
               />
             </p-fieldset>
           </div>
@@ -93,6 +98,7 @@
                 pInputText
                 [(ngModel)]="password"
                 type="password"
+                (keydown.enter)="register()"
               />
             </p-fieldset>
           </div>
@@ -106,6 +112,8 @@
             class="flex justify-content-center"
             label="Envoyer la demande"
             (click)="register()"
+            (keydown.enter)="register()"
+            type="submit"
           ></p-button>
         </div>
       </p-tabpanel>

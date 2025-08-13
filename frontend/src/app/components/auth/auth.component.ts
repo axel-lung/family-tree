@@ -107,12 +107,19 @@ export class AuthComponent {
         this.password,
         this.role,
         this.first_name,
-        this.last_name
+        this.last_name,
+        this.captchaToken
       )
       .subscribe({
         next: (response) => {
           this.authService.setUser(response.token);
           this.router.navigate(['/login']);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Succès',
+            detail:
+              'Demande créée, en attente de validation d\'un administrateur',
+          });
         },
         error: (err) => {
           this.messageService.add({

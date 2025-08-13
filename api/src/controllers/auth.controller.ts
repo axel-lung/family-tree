@@ -8,6 +8,11 @@ export const register = async (req: Request, res: Response) => {
   const { email, password, role, captchaToken, first_name, last_name } =
     req.body;
   const nodeEnvironment = process.env.NODE_ENV!;
+
+  if (!captchaToken) {
+    return res.status(420).json({ error: 'Captcha token is missing' });
+  }
+
   try {
     // Vérification Turnstile
     const turnstileSecret = process.env.TURNSTILE_SECRET_KEY!;
@@ -30,10 +35,6 @@ export const register = async (req: Request, res: Response) => {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(401).json({ error: 'Email already exists' });
-    }
-
-    if (!existingUser.approved) {
-      return res.status(401).json({ error: 'Account not approved' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

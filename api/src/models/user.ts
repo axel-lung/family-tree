@@ -6,6 +6,7 @@ export class User extends Model {
   public email!: string;
   public password!: string;
   public role!: 'admin' | 'family_member' | 'guest';
+  public approved!: boolean;
   public created_at!: Date;
   public updated_at!: Date;
 }

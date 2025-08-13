@@ -29,7 +29,11 @@ export const register = async (req: Request, res: Response) => {
     // Vérifier si l'utilisateur existe déjà
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(400).json({ error: 'Email already exists' });
+      return res.status(401).json({ error: 'Email already exists' });
+    }
+
+    if (!existingUser.approved) {
+      return res.status(401).json({ error: 'Account not approved' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -87,6 +91,10 @@ export const login = async (req: Request, res: Response) => {
     const user = await User.findOne({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json('Utilisateur ou mot de passe incorrect');
+    }
+
+    if (!user.approved) {
+      return res.status(401).json({ error: 'Account not approved' });
     }
 
     const token = jwt.sign(

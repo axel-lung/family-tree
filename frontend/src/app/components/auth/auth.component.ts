@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -38,23 +38,75 @@ export class AuthComponent {
   role: string = 'guest';
   captchaToken: string = '';
   formErrors: { [key: string]: string } = {};
+  private scriptLoaded = false;
+  private widgetId: string | undefined;
 
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
     private router: Router,
-    private messageService: MessageService
-  ) {
-    const script = document.createElement('script');
-    script.src =
-      'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onCaptchaLoaded';
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-    window.onCaptchaSuccess = (token: string) => {
-      this.captchaToken = token;
-    };
+    private messageService: MessageService,
+    private el: ElementRef,
+  ) {}
+
+  ngOnInit() {
+    this.loadTurnstileScript(() => {
+      this.renderTurnstile();
+    });
   }
+
+  loadTurnstileScript(callback: () => void) {
+    if (this.scriptLoaded) {
+      callback();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback';
+    script.defer = true;
+
+    (window as any).onloadTurnstileCallback = () => {
+      this.scriptLoaded = true;
+      callback();
+    };
+
+    document.body.appendChild(script);
+  }
+
+  renderTurnstile() {
+    if (!(window as any).turnstile) {
+      console.error('Turnstile API not loaded yet');
+      window.location.reload();
+    }
+
+    this.widgetId = (window as any).turnstile.render(this.el.nativeElement.querySelector('div'), {
+      sitekey: '0x4AAAAAABlzlgQkHqL3WmTc', // Remplace par ta clé
+      callback: (token: string) => {
+        console.log('Challenge success, token:', token);
+        this.captchaToken = token
+      },
+    });
+  }
+
+  resetWidget() {
+    if (this.widgetId) {
+      (window as any).turnstile.reset(this.widgetId);
+    }
+  }
+
+  getResponseToken(): string | null {
+    if (this.widgetId) {
+      return (window as any).turnstile.getResponse(this.widgetId);
+    }
+    return null;
+  }
+
+  removeWidget() {
+    if (this.widgetId) {
+      (window as any).turnstile.remove(this.widgetId);
+    }
+  }
+
 
   login() {
     this.formErrors = {};
@@ -134,11 +186,5 @@ export class AuthComponent {
   isPasswordValid(password: string): boolean {
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
     return regex.test(password);
-  }
-}
-
-declare global {
-  interface Window {
-    onCaptchaSuccess: (token: string) => void;
   }
 }

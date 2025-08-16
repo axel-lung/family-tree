@@ -5,6 +5,7 @@ import f3 from 'family-chart';
 import { Family } from '@family-tree-workspace/shared-models';
 import { PersonFacade } from '../../services/person-facade.service';
 import { FamilyService } from '../../services/family.service';
+import { forkJoin, map, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-tree-view',
@@ -35,80 +36,53 @@ export class TreeViewComponent implements OnInit {
     private familyService: FamilyService
   ) {}
 
-  ngOnInit() {
-    this.familyService.getSelectedFamily().subscribe(f => this.family = f);
-    this.personFacade.getPersons(this.family.id).subscribe((persons) => {
-      this.personFacade.getRelationships().subscribe((relationships) => {
-        let data: any = [];
-
-        console.log(persons);
-        
-
-        persons.forEach((person) => {
-          const spouseRel = relationships.filter(
-            (relationship) =>
-              relationship.person2_id === person.id &&
-              relationship.relationship_type === 'spouse'
-          );
-          let allspouses: any = [];
-          spouseRel.forEach((spouse) => {
-            allspouses.push(spouse.person1_id);
-          });
-
-          const childrenRel = relationships.filter(
-            (relationship) =>
-              relationship.person1_id === person.id &&
-              (relationship.relationship_type === 'father' ||
-                relationship.relationship_type === 'mother')
-          );
-
-          let allchildren: any = [];
-          childrenRel.forEach((child) => {
-            allchildren.push(child.person2_id);
-          });
-
-          let motherId: any = '';
-          const motherRel = relationships.find(
-            (relationship) =>
-              relationship.person2_id === person.id &&
-              relationship.relationship_type === 'mother'
-          );
-          motherId = motherRel?.person1_id;
-
-          let fatherId: any = '';
-          const fatherRel = relationships.find(
-            (relationship) =>
-              relationship.person2_id === person.id &&
-              relationship.relationship_type === 'father'
-          );
-          fatherId = fatherRel?.person1_id;
-
-          data.push({
-            id: person.id,
-            data: {
-              gender: person.gender,
-              'first name': person.first_name,
-              'last name': person.last_name,
-              birthday: person.birth_date,
-              avatar: '',
-              tes:
-                '<a class="flex" style="color: #333; text-decoration: none;padding: 2px; border-radius: 5px; background: white;" href="person/' +
-                person.id +
-                '">Voir les détails</a>',
-            },
-            rels: {
-              spouses: allspouses,
-              father: fatherId,
-              mother: motherId,
-              children: allchildren,
-            },
-          });
-        });
-
-        this.create(data);
+ngOnInit(): void {
+  this.familyService.getSelectedFamily().pipe(
+    switchMap(family => {
+      this.family = family;
+      return forkJoin({
+        persons: this.personFacade.getPersons(family.id),
+        relationships: this.personFacade.getRelationships()
       });
-    });
-  }
+    }),
+    map(({ persons, relationships }) =>
+      persons.map(person => {
+        const spouses = relationships
+          .filter(r => r.person2_id === person.id && r.relationship_type === 'spouse')
+          .map(r => r.person1_id);
+
+        const children = relationships
+          .filter(r =>
+            r.person1_id === person.id &&
+            ['father', 'mother'].includes(r.relationship_type)
+          )
+          .map(r => r.person2_id);
+
+        const mother = relationships.find(
+          r => r.person2_id === person.id && r.relationship_type === 'mother'
+        )?.person1_id;
+
+        const father = relationships.find(
+          r => r.person2_id === person.id && r.relationship_type === 'father'
+        )?.person1_id;
+
+        return {
+          id: person.id,
+          data: {
+            gender: person.gender,
+            first_name: person.first_name,
+            last_name: person.last_name,
+            birthday: person.birth_date,
+            avatar: '',
+            link: `<a class="flex" style="color:#333;text-decoration:none;padding:2px;border-radius:5px;background:white;" href="person/${person.id}">Voir les détails</a>`,
+          },
+          rels: { spouses, father, mother, children }
+        };
+      })
+    )
+  ).subscribe(data => this.create(data));
+}
+
 
   create(data: any) {
     const f3Chart = f3
@@ -125,7 +99,7 @@ export class TreeViewComponent implements OnInit {
 
     const f3Card = f3Chart
       .setCard(f3.CardHtml)
-      .setCardDisplay([['first name', 'last name'], ['tes']])
+      .setCardDisplay([['first_name', 'last_name'], ['link']])
       .setCardDim({})
       .setMiniTree(true)
       .setStyle('imageRect')

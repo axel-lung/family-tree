@@ -7,7 +7,6 @@ import axios from 'axios';
 export const register = async (req: Request, res: Response) => {
   const { email, password, role, captchaToken, first_name, last_name } =
     req.body;
-  const nodeEnvironment = process.env.NODE_ENV!;
 
   if (!captchaToken) {
     return res.status(420).json({ error: 'Captcha token is missing' });
@@ -49,7 +48,7 @@ export const register = async (req: Request, res: Response) => {
 
     const token = jwt.sign(
       { id: user.id, role: user.role },
-      process.env.JWT_SECRET!,
+      process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
@@ -64,7 +63,6 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   const { email, password, captchaToken } = req.body;
-  const nodeEnvironment = process.env.NODE_ENV!;
 
   if (!captchaToken) {
     return res.status(420).json({ error: 'Captcha token is missing' });
@@ -100,7 +98,7 @@ export const login = async (req: Request, res: Response) => {
 
     const token = jwt.sign(
       { id: user.id, role: user.role },
-      process.env.JWT_SECRET!,
+      process.env.JWT_SECRET,
       { expiresIn: '1d', issuer: process.env.FRONTEND_URL!, audience: 'users' }
     );
 

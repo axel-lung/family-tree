@@ -8,7 +8,6 @@ import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { FieldsetModule } from 'primeng/fieldset';
-import { environment } from '../../environments/environment';
 import { TabsModule } from 'primeng/tabs';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -42,11 +41,11 @@ export class AuthComponent {
   private widgetId: string | undefined;
 
   constructor(
-    private apiService: ApiService,
-    private authService: AuthService,
-    private router: Router,
-    private messageService: MessageService,
-    private el: ElementRef,
+    private readonly apiService: ApiService,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly messageService: MessageService,
+    private readonly el: ElementRef,
   ) {}
 
   ngOnInit() {

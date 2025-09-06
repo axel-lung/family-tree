@@ -75,7 +75,7 @@ export class AuthComponent implements OnInit {
   }
 
   private renderTurnstile(): void {
-    const container = this.el.nativeElement.querySelector('div');
+    const container = this.el.nativeElement.querySelector('#captcha');
     if (!(window as any).turnstile || !container) {
       console.error('Turnstile API non disponible');
       return;

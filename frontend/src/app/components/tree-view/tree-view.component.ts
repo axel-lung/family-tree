@@ -5,7 +5,7 @@ import f3 from 'family-chart';
 import { Family } from '@family-tree-workspace/shared-models';
 import { PersonFacade } from '../../services/person-facade.service';
 import { FamilyService } from '../../services/family.service';
-import { catchError, concatMap, forkJoin, map, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { catchError, concatMap, map, of, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-tree-view',
@@ -41,7 +41,7 @@ export class TreeViewComponent implements OnInit {
       concatMap(family => {
         console.log('concatMap - Family:', family);
         this.family = family;
-        if (!family || !family.id || family.id === 0) {
+        if (!family?.id || family?.id === 0) {
           console.log('concatMap - Invalid family or family.id, returning empty data');
           return of({ persons: [], relationships: [] });
         }

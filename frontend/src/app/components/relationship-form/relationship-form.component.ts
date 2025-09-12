@@ -151,7 +151,6 @@ export class RelationshipFormComponent implements OnInit {
       };
       this.personFacade.createRelationship(relationshipSpouse).subscribe({
         next: (res) => {
-          console.log('OUIIOI');
           this.messageService.add({
             severity: 'success',
             summary: 'Succès',
@@ -160,15 +159,12 @@ export class RelationshipFormComponent implements OnInit {
         },
         error: (err) => {
           if (err.status === 400) {
-            console.log('OKKK');
-
             this.messageService.add({
               severity: 'warn',
               summary: 'Attention',
               detail: 'Cette relation existe déjà',
             });
           } else {
-            console.log('NOK');
             this.messageService.add({
               severity: 'error',
               summary: 'Erreur',

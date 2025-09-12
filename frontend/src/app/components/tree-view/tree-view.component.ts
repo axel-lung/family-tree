@@ -5,7 +5,7 @@ import f3 from 'family-chart';
 import { Family } from '@family-tree-workspace/shared-models';
 import { PersonFacade } from '../../services/person-facade.service';
 import { FamilyService } from '../../services/family.service';
-import { forkJoin, map, switchMap } from 'rxjs';
+import { catchError, concatMap, forkJoin, map, of, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tree-view',
@@ -29,60 +29,89 @@ import { forkJoin, map, switchMap } from 'rxjs';
 export class TreeViewComponent implements OnInit {
 
   family: Family = {id: 0, name: ""};
+  familySubscription: any = new Subject<void>()
 
   constructor(
     private personFacade: PersonFacade,
-    private router: Router,
     private familyService: FamilyService
   ) {}
 
-ngOnInit(): void {
-  this.familyService.getSelectedFamily().pipe(
-    switchMap(family => {
-      this.family = family;
-      return forkJoin({
-        persons: this.personFacade.getPersons(family.id),
-        relationships: this.personFacade.getRelationships()
-      });
-    }),
-    map(({ persons, relationships }) =>
-      persons.map(person => {
-        const spouses = relationships
-          .filter(r => r.person2_id === person.id && r.relationship_type === 'spouse')
-          .map(r => r.person1_id);
+  ngOnInit(): void {
+    this.familySubscription = this.familyService.getSelectedFamily().pipe(
+      concatMap(family => {
+        console.log('concatMap - Family:', family);
+        this.family = family;
+        if (!family || !family.id || family.id === 0) {
+          console.log('concatMap - Invalid family or family.id, returning empty data');
+          return of({ persons: [], relationships: [] });
+        }
+        // Étape 1 : Récupérer les persons
+        return this.personFacade.getPersons(family.id).pipe(
+          catchError(error => {
+            console.error('Error in getPersons:', error);
+            return of([]);
+          }),
+          // Étape 2 : Récupérer les relationships
+          concatMap(persons => {
+            console.log('getPersons - Data:', persons);
+            return this.personFacade.getRelationships().pipe(
+              catchError(error => {
+                console.error('Error in getRelationships:', error);
+                return of([]);
+              }),
+              map(relationships => {
+                console.log('getRelationships - Data:', relationships);
+                return { persons, relationships };
+              })
+            );
+          })
+        );
+      }),
+      map(({ persons, relationships }) => {
+        console.log('map - Data:', { persons, relationships });
+        return persons.map(person => {
+          const spouses = relationships
+            .filter(r => r.person2_id === person.id && r.relationship_type === 'spouse')
+            .map(r => r.person1_id);
 
-        const children = relationships
-          .filter(r =>
-            r.person1_id === person.id &&
-            ['father', 'mother'].includes(r.relationship_type)
-          )
-          .map(r => r.person2_id);
+          const children = relationships
+            .filter(r =>
+              r.person1_id === person.id &&
+              ['father', 'mother'].includes(r.relationship_type)
+            )
+            .map(r => r.person2_id);
 
-        const mother = relationships.find(
-          r => r.person2_id === person.id && r.relationship_type === 'mother'
-        )?.person1_id;
+          const mother = relationships.find(
+            r => r.person2_id === person.id && r.relationship_type === 'mother'
+          )?.person1_id;
 
-        const father = relationships.find(
-          r => r.person2_id === person.id && r.relationship_type === 'father'
-        )?.person1_id;
+          const father = relationships.find(
+            r => r.person2_id === person.id && r.relationship_type === 'father'
+          )?.person1_id;
 
-        return {
-          id: person.id,
-          data: {
-            gender: person.gender,
-            first_name: person.first_name,
-            last_name: person.last_name,
-            birthday: person.birth_date,
-            avatar: '',
-            link: `<a class="flex" style="color:#333;text-decoration:none;padding:2px;border-radius:5px;background:white;" href="person/${person.id}">Voir les détails</a>`,
-          },
-          rels: { spouses, father, mother, children }
-        };
+          return {
+            id: person.id,
+            data: {
+              gender: person.gender,
+              first_name: person.first_name,
+              last_name: person.last_name,
+              birthday: person.birth_date,
+              avatar: '',
+              link: `<a class="flex" style="color:#333;text-decoration:none;padding:2px;border-radius:5px;background:white;" href="person/${person.id}">Voir les détails</a>`,
+            },
+            rels: { spouses, father, mother, children },
+          };
+        });
+      }),
+      catchError(error => {
+        console.error('Error in subscription:', error);
+        return of([]);
       })
-    )
-  ).subscribe(data => this.create(data));
-}
-
+    ).subscribe(data => {
+      console.log('subscribe - Chart data:', data);
+      this.create(data)
+    });
+  }
 
   create(data: any) {
     const f3Chart = f3
@@ -97,7 +126,7 @@ ngOnInit(): void {
       .setProgenyDepth(10)
       .setPrivateCardsConfig(false);
 
-    const f3Card = f3Chart
+    f3Chart
       .setCard(f3.CardHtml)
       .setCardDisplay([['first_name', 'last_name'], ['link']])
       .setCardDim({})
@@ -105,16 +134,16 @@ ngOnInit(): void {
       .setStyle('imageRect')
       .setOnHoverPathToMain();
 
-    const f3EditTree = f3Chart
-      .editTree()
-      .fixed(true)
-      .setFields(['first name', 'last name', 'birthday', 'avatar'])
-      .setEditFirst(true);
+    // const f3EditTree = f3Chart
+    //   .editTree()
+    //   .fixed(true)
+    //   .setFields(['first name', 'last name', 'birthday', 'avatar'])
+    //   .setEditFirst(true);
     // .setCardClickOpen(f3Card);
 
-    f3EditTree.setEdit();
+    // f3EditTree.setEdit();
 
-    f3Chart.updateTree({ initial: true });
+    // f3Chart.updateTree({ initial: true });
     // f3EditTree.open(f3Chart.getMainDatum());
 
     f3Chart.updateTree({ initial: true });

@@ -10,7 +10,7 @@ import { environment } from '../environments/environment';
 export class ApiService {
   private apiUrl: string = environment.apiUrl;
 
-  constructor(private http: HttpClient) {console.log(this.apiUrl);}
+  constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -28,11 +28,11 @@ export class ApiService {
 
   // Personnes
   getPersons(familyId: number): Observable<Person[]> {
-    return this.http.get<Person[]>(`${this.apiUrl}/persons/${familyId}`, { headers: this.getHeaders() });
+    return this.http.get<Person[]>(`${this.apiUrl}/persons/family/${familyId}`, { headers: this.getHeaders() });
   }
 
   getPerson(id: number): Observable<Person> {
-    return this.http.get<Person>(`${this.apiUrl}/persons/${id}`, { headers: this.getHeaders() });
+    return this.http.get<Person>(`${this.apiUrl}/persons/${id}`, { headers: this.getHeaders() })
   }
 
   createPerson(person: Partial<Person>): Observable<Person> {

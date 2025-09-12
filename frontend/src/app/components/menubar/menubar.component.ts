@@ -84,9 +84,6 @@ export class MenubarComponent {
     this.familyService.getSelectedFamily().subscribe((family) => {
       this.familyName = family?.name;
     });
-
-    console.log(this.familyName);
-
     this.items.push({
       label: `Arbre généalogique ${this.familyName}`,
       icon: 'pi pi-home',

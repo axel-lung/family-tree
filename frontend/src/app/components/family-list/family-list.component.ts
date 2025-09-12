@@ -46,10 +46,6 @@ export class FamilyListComponent {
     const family = this.families.find((f) => f.id === this.selectedFamilyId);
     if (family) {
       this.familyService.setSelectedFamily(family);
-      console.log("OK");
-      console.log(family);
-      
-      
       this.router.navigate(['/tree']);
     }
   }

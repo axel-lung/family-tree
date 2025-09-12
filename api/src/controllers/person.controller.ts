@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { Person } from '../models/person';
+import { log } from 'console';
 
 export const getPersons = async (req: Request, res: Response) => {
-  try {
-    console.log(req);
-    
+  
+  try {    
     const persons = await Person.findAll({ where: { deleted: false, family_id: req.params.familyId } });
     res.json(persons);
   } catch (error) {
@@ -14,6 +14,8 @@ export const getPersons = async (req: Request, res: Response) => {
 
 export const getPerson = async (req: Request, res: Response) => {
   try {
+    console.log("=================================================dkngsjdkfgnb");
+    
     const person = await Person.findByPk(req.params.id);
     if (!person || person.deleted) {
       return res.status(404).json({ error: 'Person not found' });
@@ -25,6 +27,8 @@ export const getPerson = async (req: Request, res: Response) => {
       response.phone = person.phone;
       response.residence = person.residence;
     }
+    console.log(res);
+    
     res.json(response);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch person' });

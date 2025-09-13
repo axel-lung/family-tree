@@ -8,7 +8,7 @@ export const getUsers = async (req: Request, res: Response) => {
     const users = await User.findAll({ attributes: { exclude: ['password'] } });
     res.json(users);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch users' });
+    res.status(500).json({ error: 'Failed to fetch users:' + error  });
   }
 };
 
@@ -22,7 +22,7 @@ export const updateUser = async (req: Request, res: Response) => {
     await user.update(req.body);
     res.json({ message: 'User updated' });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update user' });
+    res.status(500).json({ error: 'Failed to update user:' + error  });
   }
 };
 
@@ -33,7 +33,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     await user.destroy();
     res.json({ message: 'User deleted' });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete user' });
+    res.status(500).json({ error: 'Failed to delete user:' + error  });
   }
 };
 
@@ -57,6 +57,6 @@ export const setPermission = async (req: Request, res: Response) => {
       res.json({ message: 'Permission created' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Failed to set permission' });
+    res.status(500).json({ error: 'Failed to set permission:' + error  });
   }
 };

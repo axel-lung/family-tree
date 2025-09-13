@@ -86,10 +86,10 @@ export class RelationshipFormComponent implements OnInit {
   family: Family = {id: 0, name:""};
 
   constructor(
-    private personFacade: PersonFacade,
-    private router: Router,
-    private messageService: MessageService,
-    private familyService: FamilyService
+    private readonly personFacade: PersonFacade,
+    private readonly router: Router,
+    private readonly messageService: MessageService,
+    private readonly familyService: FamilyService
   ) {}
 
   ngOnInit() {

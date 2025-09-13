@@ -32,7 +32,7 @@ export const checkPermission = (
         const permission = await Permission.findOne({
           where: { user_id: user.id, person_id: personId },
         });
-        if (!permission || !permission[`can_${requiredPermission}`]) {
+        if (!permission || !permission?.[`can_${requiredPermission}`]) {
           return res.status(403).json({ error: 'Insufficient permissions' });
         }
       }
@@ -49,7 +49,7 @@ export const checkPermission = (
 
       next();
     } catch (error) {
-      res.status(401).json({ error: 'Invalid token' });
+      res.status(401).json({ error: 'Invalid token:' + error  });
     }
   };
 };

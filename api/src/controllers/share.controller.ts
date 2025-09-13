@@ -12,7 +12,7 @@ import { Person } from '../models/person';
        const link = `http://localhost:4200/share/${token}`;
        res.json({ link });
      } catch (error) {
-       res.status(500).json({ error: 'Failed to generate share link' });
+       res.status(500).json({ error: 'Failed to generate share link:' + error  });
      }
    };
 
@@ -30,6 +30,6 @@ import { Person } from '../models/person';
        if (!person || person.deleted) return res.status(404).json({ error: 'Person not found' });
        res.json(person);
      } catch (error) {
-       res.status(500).json({ error: 'Failed to access shared person' });
+       res.status(500).json({ error: 'Failed to access shared person:' + error  });
      }
    };

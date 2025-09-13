@@ -9,9 +9,9 @@ import { environment } from '../environments/environment.prod';
   providedIn: 'root',
 })
 export class PermissionService {
-  private apiUrl = environment.apiUrl;
+  private readonly apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');

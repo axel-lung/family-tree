@@ -3,7 +3,6 @@ import express from 'express';
 import { sequelize } from './config/database';
 import { initModels } from './models';
 import authRoutes from './routes/auth.routes';
-import { redisClient } from './config/redis.config';
 import cors from 'cors';
 import personRoutes from './routes/person.routes';
 import relationshipRoutes from './routes/relationship.routes';
@@ -52,7 +51,6 @@ async function bootstrap() {
   try {
     await sequelize.authenticate();
     console.log('Database connection established');
-    // await redisClient.connect();
     initModels(); // Initialiser les relations
     await sequelize.sync({ force: false }); // Force: true pour développement, à retirer en production
     console.log('Database synced');

@@ -34,9 +34,9 @@ export class ShareComponent implements OnInit {
   person: Person | null = null;
 
   constructor(
-    private http: HttpClient,
-    private route: ActivatedRoute,
-    private messageService: MessageService
+    private readonly http: HttpClient,
+    private readonly route: ActivatedRoute,
+    private readonly messageService: MessageService
   ) {}
 
   ngOnInit() {

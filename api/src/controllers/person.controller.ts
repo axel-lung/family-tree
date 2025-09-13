@@ -7,7 +7,7 @@ export const getPersons = async (req: Request, res: Response) => {
     const persons = await Person.findAll({ where: { deleted: false, family_id: req.params.familyId } });
     res.json(persons);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch persons' });
+    res.status(500).json({ error: 'Failed to fetch persons:' + error  });
   }
 };
 
@@ -26,7 +26,7 @@ export const getPerson = async (req: Request, res: Response) => {
     }    
     res.json(response);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch person' });
+    res.status(500).json({ error: 'Failed to fetch person:' + error  });
   }
 };
 
@@ -35,7 +35,7 @@ export const createPerson = async (req: Request, res: Response) => {
     const person = await Person.create(req.body);
     res.status(201).json(person);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create person' });
+    res.status(500).json({ error: 'Failed to create person:' + error  });
   }
 };
 
@@ -48,7 +48,7 @@ export const updatePerson = async (req: Request, res: Response) => {
     await person.update(req.body);
     res.json({ message: 'Person updated' });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update person' });
+    res.status(500).json({ error: 'Failed to update person:' + error  });
   }
 };
 
@@ -61,6 +61,6 @@ export const deletePerson = async (req: Request, res: Response) => {
     await person.update({ deleted: true });
     res.json({ message: 'Person deleted' });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete person' });
+    res.status(500).json({ error: 'Failed to delete person:' + error  });
   }
 };

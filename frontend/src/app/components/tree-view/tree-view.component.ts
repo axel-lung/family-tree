@@ -1,6 +1,5 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import f3 from 'family-chart';
 import { Family } from '@family-tree-workspace/shared-models';
 import { PersonFacade } from '../../services/person-facade.service';
@@ -32,8 +31,8 @@ export class TreeViewComponent implements OnInit {
   familySubscription: any = new Subject<void>()
 
   constructor(
-    private personFacade: PersonFacade,
-    private familyService: FamilyService
+    private readonly personFacade: PersonFacade,
+    private readonly familyService: FamilyService
   ) {}
 
   ngOnInit(): void {
@@ -133,18 +132,6 @@ export class TreeViewComponent implements OnInit {
       .setMiniTree(true)
       .setStyle('imageRect')
       .setOnHoverPathToMain();
-
-    // const f3EditTree = f3Chart
-    //   .editTree()
-    //   .fixed(true)
-    //   .setFields(['first name', 'last name', 'birthday', 'avatar'])
-    //   .setEditFirst(true);
-    // .setCardClickOpen(f3Card);
-
-    // f3EditTree.setEdit();
-
-    // f3Chart.updateTree({ initial: true });
-    // f3EditTree.open(f3Chart.getMainDatum());
 
     f3Chart.updateTree({ initial: true });
   }

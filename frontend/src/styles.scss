@@ -112,16 +112,12 @@ body, app-root, app-auth{
   -webkit-transform: translateY(-8px) scale(0.8);
   transform: translateY(-8px) scale(0.8);
 }
-.f3.f3-cont {
+.f3 .f3-cont {
   width: 100%;
   height: 900px;
   max-height: 70vh;
   background-color: var(--background-color);
   color: var(--text-color);
-}
-.f3 {
-  position: relative;
-  display: flex;
 }
 
 /* form-info */
@@ -321,13 +317,6 @@ body, app-root, app-auth{
   object-fit: cover;
 }
 
-.f3 div.card-image-circle img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 .f3 div.card-rect {
   padding: 5px;
   border-radius: 3px;
@@ -501,11 +490,6 @@ body, app-root, app-auth{
   display: none;
 }
 
-.f3 div.card-new-rel .card-inner {
-  border-width: 1px;
-  border-style: dashed;
-  outline: 0px !important;
-}
 .f3 div.card-new-rel.card-female .card-inner,
 .f3 div.card-to-add.card-female .card-inner {
   border-color: var(--female-color);

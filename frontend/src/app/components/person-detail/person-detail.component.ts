@@ -27,13 +27,13 @@ export class PersonDetailComponent implements OnInit {
   user: User | null = null;
 
   constructor(
-    private personFacade: PersonFacade,
-    private permissionService: PermissionService,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private messageService: MessageService,
-    private http: HttpClient
+    private readonly personFacade: PersonFacade,
+    private readonly permissionService: PermissionService,
+    private readonly authService: AuthService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly messageService: MessageService,
+    private readonly http: HttpClient
   ) {}
 
   ngOnInit() {

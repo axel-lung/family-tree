@@ -19,7 +19,7 @@ export const authenticateJWT = (
     req.user = decoded; // TypeScript reconnaît maintenant req.user grâce à la déclaration
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    res.status(401).json({ error: 'Invalid token:' + error  });
   }
 };
 
@@ -42,6 +42,6 @@ export const restrictToAdmin = async (
     req.user = decoded;
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    res.status(401).json({ error: 'Invalid token:' + error  });
   }
 };

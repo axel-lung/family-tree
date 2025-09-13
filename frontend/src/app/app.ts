@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenubarComponent } from './components/menubar/menubar.component';
 import { AuthService } from './services/auth.service';
@@ -20,7 +20,7 @@ export class App {
   isAuthenticated: boolean = false;
   isFamilySelected: boolean = false;
 
-  constructor(private authService: AuthService, private familyService: FamilyService) {
+  constructor(private readonly authService: AuthService, private readonly familyService: FamilyService) {
     this.authService.getUser().subscribe((user) => {
       this.isAuthenticated = !!user;
     });

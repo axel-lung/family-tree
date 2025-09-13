@@ -33,16 +33,16 @@ export class PersonFormComponent implements OnInit {
   person: Partial<Person> = { first_name: '', last_name: '', deleted: false };
   isEdit: boolean = false;
   isOwnProfile: boolean = false; // À implémenter avec l'utilisateur connecté
-  genders: String[] | undefined;
+  genders: string[] | undefined;
 
   constructor(
-    private personFacade: PersonFacade,
-    private route: ActivatedRoute,
-    private router: Router,
-    private familyService: FamilyService
+    private readonly personFacade: PersonFacade,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly familyService: FamilyService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.genders = ['M', 'F'];
     this.familyService.getSelectedFamily().subscribe(f => this.person.family_id = f.id);

@@ -7,10 +7,10 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class FamilyFacade {
-  private familiesCache = new BehaviorSubject<Family[]>([]);
-  private selectedFamily = new BehaviorSubject<Family | null>(null);
+  private readonly familiesCache = new BehaviorSubject<Family[]>([]);
+  private readonly selectedFamily = new BehaviorSubject<Family | null>(null);
 
-  constructor(private apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) {}
 
   getFamilies(): Observable<Family[]> {
     if (!this.familiesCache.value.length) {

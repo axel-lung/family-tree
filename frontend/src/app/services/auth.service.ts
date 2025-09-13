@@ -7,7 +7,7 @@ import jwtDecode from 'jwt-decode';
   providedIn: 'root',
 })
 export class AuthService {
-  private userSubject = new BehaviorSubject<User | null>(null);
+  private readonly userSubject = new BehaviorSubject<User | null>(null);
 
   constructor() {
     this.loadUserFromToken();

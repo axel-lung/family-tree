@@ -6,7 +6,7 @@ export const getRelationships = async (req: Request, res: Response) => {
     const relationships = await Relationship.findAll();
     res.json(relationships);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch relationships' });
+    res.status(500).json({ error: 'Failed to fetch relationships:' + error  });
   }
 };
 
@@ -30,6 +30,6 @@ export const createRelationship = async (req: Request, res: Response) => {
 
     res.status(201).json(relationship);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create relationship' });
+    res.status(500).json({ error: 'Failed to create relationship:' + error  });
   }
 };

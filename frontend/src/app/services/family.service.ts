@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class FamilyService {
   private readonly FAMILY_KEY = 'selectedFamily';
 
-  private familySubject = new BehaviorSubject<Family>({ id: 0, name: '' });
+  private readonly familySubject = new BehaviorSubject<Family>({ id: 0, name: '' });
 
   constructor() {
     const savedValue = localStorage.getItem(this.FAMILY_KEY);

@@ -9,6 +9,6 @@ export const getPermissions = async (req: Request, res: Response) => {
     });
     res.json(permissions);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch permissions' });
+    res.status(500).json({ error: 'Failed to fetch permissions:' + error  });
   }
 };

@@ -6,7 +6,7 @@ export const getFamilies = async (req: Request, res: Response) => {
     const families = await Family.findAll();
     res.json(families);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch families' });
+    res.status(500).json({ error: 'Failed to fetch families:' + error });
   }
 };
 
@@ -16,16 +16,10 @@ export const getFamily = async (req: Request, res: Response) => {
     if (!family) {
       return res.status(404).json({ error: 'Family not found' });
     }
-    // const user = req.user as { id: number; role: string };
     const response = { ...family.get()};
-    // if (user.role === 'admin' || family.user_id === user.id) {
-    //   response.email = family.email;
-    //   response.phone = family.phone;
-    //   response.residence = family.residence;
-    // }
     res.json(response);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch family' });
+    res.status(500).json({ error: 'Failed to fetch family:' + error  });
   }
 };
 
@@ -34,6 +28,6 @@ export const createFamily = async (req: Request, res: Response) => {
     const family = await Family.create(req.body);
     res.status(201).json(family);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create family' });
+    res.status(500).json({ error: 'Failed to create family:' + error  });
   }
 };

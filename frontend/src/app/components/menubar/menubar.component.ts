@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { CommonModule } from '@angular/common';
@@ -11,10 +11,8 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../services/auth.service';
-import { PermissionService } from '../../services/permission.service';
-import { Family, User } from '@family-tree-workspace/shared-models';
+import { User } from '@family-tree-workspace/shared-models';
 import { FamilyService } from '../../services/family.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-menubar',
@@ -53,18 +51,17 @@ import { Subscription } from 'rxjs';
   `,
   styles: [],
 })
-export class MenubarComponent {
+export class MenubarComponent implements OnInit {
   user: User | null = null;
   items: MenuItem[] = [];
   isAuthenticated: boolean = false;
   isFamilySelected: boolean = false;
   familyName: string | undefined;
   constructor(
-    private permissionService: PermissionService,
-    private authService: AuthService,
-    private messageService: MessageService,
-    private router: Router,
-    private familyService: FamilyService
+    private readonly authService: AuthService,
+    private readonly messageService: MessageService,
+    private readonly router: Router,
+    private readonly familyService: FamilyService
   ) {
     this.authService.getUser().subscribe((user) => {
       this.isAuthenticated = !!user;
@@ -76,7 +73,7 @@ export class MenubarComponent {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.authService.getUser().subscribe((user) => {
       this.user = user;
     });

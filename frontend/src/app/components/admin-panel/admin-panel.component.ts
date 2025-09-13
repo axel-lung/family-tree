@@ -22,90 +22,16 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
   ],
   providers: [MessageService],
-  template: `
-    <p-toast></p-toast>
-    <h2>Panneau d'administration</h2>
-    <p-table [value]="users" [tableStyle]="{ 'min-width': '50rem' }">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Email</th>
-          <th>Rôle</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-user>
-        <tr>
-          <td>{{ user.email }}</td>
-          <td>{{ user.role }}</td>
-          <td>
-            <p-button
-              label="Modifier"
-              (click)="editUser(user)"
-              styleClass="p-button-sm"
-            ></p-button>
-            <p-button
-              label="Supprimer"
-              (click)="deleteUser(user.id)"
-              styleClass="p-button-danger p-button-sm"
-            ></p-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <h3>Gérer les permissions</h3>
-    <p-table [value]="users" [tableStyle]="{ 'min-width': '50rem' }">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Utilisateur</th>
-          <th>Personne</th>
-          <th>Créer</th>
-          <th>Modifier</th>
-          <th>Supprimer</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-perm>
-        <tr>
-          <td>{{ perm.user_id }}</td>
-          <td>{{ perm.person_id }}</td>
-          <td>
-            <p-toggleswitch
-              [(ngModel)]="perm.can_create"
-              (onChange)="updatePermission(perm)"
-            ></p-toggleswitch>
-          </td>
-          <td>
-            <p-toggleswitch
-              [(ngModel)]="perm.can_update"
-              (onChange)="updatePermission(perm)"
-            ></p-toggleswitch>
-          </td>
-          <td>
-            <p-toggleswitch
-              [(ngModel)]="perm.can_delete"
-              (onChange)="updatePermission(perm)"
-            ></p-toggleswitch>
-          </td>
-          <td>
-            <p-button
-              label="Enregistrer"
-              (click)="updatePermission(perm)"
-              styleClass="p-button-sm"
-            ></p-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  `,
+  templateUrl: './admin-panel.component.html'
 })
 export class AdminPanelComponent implements OnInit {
   users: User[] = [];
   permissions: Permission[] = [];
 
   constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-    private messageService: MessageService
+    private readonly http: HttpClient,
+    private readonly authService: AuthService,
+    private readonly messageService: MessageService
   ) {}
 
   ngOnInit() {

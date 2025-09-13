@@ -32,9 +32,9 @@ export class FamilyFormComponent {
   family: Partial<Family> = {};
 
   constructor(
-    private familyFacade: FamilyFacade,
-    private router: Router,
-    private messageService: MessageService
+    private readonly familyFacade: FamilyFacade,
+    private readonly router: Router,
+    private readonly messageService: MessageService
   ) {}
 
   goBack() {

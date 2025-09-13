@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FamilyFacade } from '../../services/family-facade.service';
@@ -23,17 +23,17 @@ import { FamilyService } from '../../services/family.service';
   templateUrl: './family-list.component.html',
   styleUrl: './family-list.component.css',
 })
-export class FamilyListComponent {
+export class FamilyListComponent implements OnInit {
   families: { id: number; name: string }[] = [];
   selectedFamilyId: number = 0;
 
   constructor(
-    private familyService: FamilyService,
-    private familyFacade: FamilyFacade,
-    private router: Router
+    private readonly familyService: FamilyService,
+    private readonly familyFacade: FamilyFacade,
+    private readonly router: Router
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.familyFacade.getFamilies().subscribe((families) => {
       this.families = families.map((f) => ({
         id: f.id,

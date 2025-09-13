@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Person, Relationship } from '@family-tree-workspace/shared-models';
 
@@ -8,11 +8,11 @@ import { Person, Relationship } from '@family-tree-workspace/shared-models';
   providedIn: 'root',
 })
 export class PersonFacade {
-  private personsCache = new BehaviorSubject<Person[]>([]);
-  private selectedPerson = new BehaviorSubject<Person | null>(null);
-  private relationshipsCache = new BehaviorSubject<Relationship[]>([]);
+  private readonly personsCache = new BehaviorSubject<Person[]>([]);
+  private readonly selectedPerson = new BehaviorSubject<Person | null>(null);
+  private readonly relationshipsCache = new BehaviorSubject<Relationship[]>([]);
 
-  constructor(private apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) {}
 
   getPersons(familyId: number): Observable<Person[]> {
     if (!this.personsCache.value.length) {

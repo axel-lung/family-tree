@@ -20,7 +20,7 @@ export interface Person {
   email?: string;
   phone?: string;
   residence?: string;
-  photo_url?: string;
+  photo?: Blob;
   deleted: boolean;
   family_id: number;
 }

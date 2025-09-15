@@ -15,7 +15,7 @@ export class Person extends Model {
   public email!: string | null;
   public phone!: string | null;
   public residence!: string | null;
-  public photo_url!: string | null;
+  public photo!: Blob | null;
   public deleted!: boolean;
   public family_id!: number;
   public created_at!: Date;
@@ -74,8 +74,8 @@ Person.init(
       type: DataTypes.STRING(255),
       allowNull: true,
     },
-    photo_url: {
-      type: DataTypes.STRING(255),
+    photo: {
+      type: DataTypes.BLOB('long'),
       allowNull: true,
     },
     deleted: {

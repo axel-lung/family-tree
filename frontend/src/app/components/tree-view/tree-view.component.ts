@@ -96,7 +96,7 @@ export class TreeViewComponent implements OnInit {
               last_name: person.last_name,
               birthday: person.birth_date,
               avatar: '',
-              link: `<a class="flex" style="color:#333;text-decoration:none;padding:2px;border-radius:5px;background:white;" href="person/${person.id}">Voir les détails</a>`,
+              link: `<a class="flex" style="color:#333;text-decoration:none;padding:2px;border-radius:5px;background:white;position: absolute; right: 0; bottom: -25px" href="person/${person.id}">Voir les détails</a>`,
             },
             rels: { spouses, father, mother, children },
           };

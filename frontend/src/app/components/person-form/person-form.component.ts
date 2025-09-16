@@ -8,7 +8,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { PersonFacade } from '../../services/person-facade.service';
 import { Person } from '@family-tree-workspace/shared-models';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FileUpload } from 'primeng/fileupload';
+import { FileUpload, FileUploadHandlerEvent } from 'primeng/fileupload';
 import { FieldsetModule } from 'primeng/fieldset';
 import { Select } from 'primeng/select';
 import { FamilyService } from '../../services/family.service';
@@ -74,8 +74,21 @@ export class PersonFormComponent implements OnInit {
     this.router.navigate(['/tree']);
   }
 
-  onUpload(event: any) {
-    console.log('Upload event:', event);
-    // handle uploaded files here
+  onUpload(event: FileUploadHandlerEvent) {
+    if (event.files && event.files.length > 0) {
+      const file = event.files[0]; // fichier sélectionné
+      if (file.size > 2 * 1024 * 1024) { // 2MB
+        alert('Fichier trop lourd !');
+        return;
+      }
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        // Stocke directement le base64 dans person.photo
+        this.person.photo = reader.result as string;
+      };
+
+      reader.readAsDataURL(file); // lance la conversion en base64
+    }
   }
 }

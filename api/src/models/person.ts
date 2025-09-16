@@ -15,7 +15,7 @@ export class Person extends Model {
   public email!: string | null;
   public phone!: string | null;
   public residence!: string | null;
-  public photo!: Blob | null;
+  public photo!: string | null;
   public deleted!: boolean;
   public family_id!: number;
   public created_at!: Date;

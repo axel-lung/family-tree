@@ -3,26 +3,27 @@
     
     <p-card *ngIf="person">   
         <p-button styleClass="p-button-outlined pt-1 pb-1 pl-2 pr-2" label="Retour à l'arbre" (click)="goToTree()"></p-button>
-        <div class="col-6 mt-4">
-            <h1 [ngClass]="person.gender === 'M' ? 'male' : 'female'">{{ person.first_name }} {{ person.last_name }} - {{ person.gender }}</h1>
-            <p><strong>Date de naissance :</strong> {{ person.birth_date | date:'dd/MM/yyyy' || 'N/A' }}</p>
-            <p><strong>Lieu de naissance :</strong> {{ person.birth_place || 'N/A' }}</p>
-            <p><strong>Date de décès :</strong> {{ person.death_date | date:'dd/MM/yyyy' || 'N/A' }}</p>
-            <p><strong>Biographie :</strong> {{ person.biography || 'N/A' }}</p>
-            <p *ngIf="person.email && isOwnProfile">
-                <strong>Email :</strong> {{ person.email }}
-            </p>
-            <p *ngIf="person.phone && isOwnProfile">
-                <strong>Téléphone :</strong> {{ person.phone }}
-            </p>
-            <p *ngIf="person.residence && isOwnProfile">
-                <strong>Résidence :</strong> {{ person.residence }}
-            </p>
-            <p>
-                <strong>Photo :</strong>
-                <img alt="Image de {{ person.first_name }} {{ person.last_name }}" [src]="person.photo" *ngIf="person.photo" width="100" />
-            </p>
-        </div> 
+        <div class="flex">
+            <div class="col-6 mt-4">
+                <h1 [ngClass]="person.gender === 'M' ? 'male' : 'female'">{{ person.first_name }} {{ person.last_name }} - {{ person.gender }}</h1>
+                <p><strong>Date de naissance :</strong> {{ person.birth_date | date:'dd/MM/yyyy' || 'N/A' }}</p>
+                <p><strong>Lieu de naissance :</strong> {{ person.birth_place || 'N/A' }}</p>
+                <p><strong>Date de décès :</strong> {{ person.death_date | date:'dd/MM/yyyy' || 'N/A' }}</p>
+                <p><strong>Biographie :</strong> {{ person.biography || 'N/A' }}</p>
+                <p *ngIf="person.email && isOwnProfile">
+                    <strong>Email :</strong> {{ person.email }}
+                </p>
+                <p *ngIf="person.phone && isOwnProfile">
+                    <strong>Téléphone :</strong> {{ person.phone }}
+                </p>
+                <p *ngIf="person.residence && isOwnProfile">
+                    <strong>Résidence :</strong> {{ person.residence }}
+                </p>
+            </div> 
+            <div class="col-6 mt-4">
+                <img alt="Image de {{ person.first_name }} {{ person.last_name }}" [src]="person.photo" *ngIf="person.photo" width="300" />
+            </div> 
+        </div>
         <div class="mt-6 flex col-4 gap-3">
             <p-button label="Modifier" (click)="editPerson()" *ngIf="canEdit"></p-button>
             <p-button

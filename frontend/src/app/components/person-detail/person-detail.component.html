@@ -6,10 +6,20 @@
         <div class="flex">
             <div class="col-6 mt-4">
                 <h1 [ngClass]="person.gender === 'M' ? 'male' : 'female'">{{ person.first_name }} {{ person.last_name }} - {{ person.gender }}</h1>
-                <p><strong>Date de naissance :</strong> {{ person.birth_date | date:'dd/MM/yyyy' || 'N/A' }}</p>
-                <p><strong>Lieu de naissance :</strong> {{ person.birth_place || 'N/A' }}</p>
-                <p><strong>Date de décès :</strong> {{ person.death_date | date:'dd/MM/yyyy' || 'N/A' }}</p>
-                <p><strong>Biographie :</strong> {{ person.biography || 'N/A' }}</p>
+                <p>
+                    Né<span *ngIf="person.gender === 'F'">e</span>
+                    <span *ngIf="person.birth_date"> le {{ person.birth_date | date:'dd/MM/yyyy' }} </span>
+                    <span *ngIf="person.death_date && person.birth_date">({{ calculateAge(person) }} ans)</span>
+                </p>
+                <p *ngIf="person.birth_place">Né<span *ngIf="person.gender === 'F'">e</span>
+                    à <span> {{ person.birth_place }} </span>
+                </p>
+                <p *ngIf="person.death_date">
+                    Décédé<span *ngIf="person.gender === 'F'">e</span>
+                    <span> le {{ person.death_date | date:'dd/MM/yyyy' }} </span>
+                </p>
+                <br/>
+                <p *ngIf="person.biography"><strong>Quoi de neuf sur {{ person.first_name }} ?</strong><br/> {{ person.biography }}</p>
                 <p *ngIf="person.email && isOwnProfile">
                     <strong>Email :</strong> {{ person.email }}
                 </p>

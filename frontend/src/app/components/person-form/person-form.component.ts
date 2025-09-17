@@ -30,7 +30,7 @@ import { FamilyService } from '../../services/family.service';
   templateUrl: './person-form.component.html',
 })
 export class PersonFormComponent implements OnInit {
-  person: Partial<Person> = { first_name: '', last_name: '', deleted: false };
+  person: Partial<Person> = {};
   isEdit: boolean = false;
   isOwnProfile: boolean = false; // À implémenter avec l'utilisateur connecté
   genders: string[] | undefined;
@@ -50,6 +50,8 @@ export class PersonFormComponent implements OnInit {
       this.isEdit = true;
       this.personFacade.getPerson(Number(id)).subscribe((person) => {
         this.person = { ...person };
+        if (person?.birth_date) this.person.birth_date = new Date(person.birth_date)  
+        if (person?.death_date) this.person.death_date = new Date(person.death_date)  
         // Vérifier si l'utilisateur connecté est le propriétaire (à implémenter)
         this.isOwnProfile = true; // Placeholder
       });

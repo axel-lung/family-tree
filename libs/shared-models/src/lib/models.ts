@@ -13,9 +13,9 @@ export interface Person {
   first_name: string;
   last_name: string;
   gender?: 'M' | 'F';
-  birth_date?: string;
+  birth_date?: Date;
   birth_place?: string;
-  death_date?: string;
+  death_date?: Date;
   biography?: string;
   email?: string;
   phone?: string;

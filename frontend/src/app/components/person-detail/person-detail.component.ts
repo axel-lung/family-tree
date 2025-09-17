@@ -122,4 +122,17 @@ export class PersonDetailComponent implements OnInit {
   goToTree() {
     this.router.navigate(['/tree']);
   }
+
+  calculateAge(person: Person): number | string {
+    if (!person.birth_date) return 'N/A';
+    const birth = new Date(person.birth_date);
+    const endDate = person.death_date ? new Date(person.death_date) : new Date();
+    let age = endDate.getFullYear() - birth.getFullYear();
+    const monthDiff = endDate.getMonth() - birth.getMonth();
+    const dayDiff = endDate.getDate() - birth.getDate();
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age--;
+    }
+    return age;
+  }
 }

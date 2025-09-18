@@ -7,7 +7,7 @@ import { CardModule } from 'primeng/card';
 import { FieldsetModule } from 'primeng/fieldset';
 import { TabsModule } from 'primeng/tabs';
 import { ToastModule } from 'primeng/toast';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { take } from 'rxjs/operators';
 
@@ -27,6 +27,7 @@ import { AuthService } from '../../services/auth.service';
     FieldsetModule,
     TabsModule,
     ToastModule,
+    RouterModule
   ],
   templateUrl: 'auth.component.html',
   providers: [MessageService],

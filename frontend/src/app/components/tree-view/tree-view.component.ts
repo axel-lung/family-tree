@@ -38,10 +38,9 @@ export class TreeViewComponent implements OnInit {
   ngOnInit(): void {
     this.familySubscription = this.familyService.getSelectedFamily().pipe(
       concatMap(family => {
-        console.log('concatMap - Family:', family);
         this.family = family;
         if (!family?.id || family?.id === 0) {
-          console.log('concatMap - Invalid family or family.id, returning empty data');
+          console.error('concatMap - Invalid family or family.id, returning empty data');
           return of({ persons: [], relationships: [] });
         }
         // Étape 1 : Récupérer les persons
@@ -52,14 +51,12 @@ export class TreeViewComponent implements OnInit {
           }),
           // Étape 2 : Récupérer les relationships
           concatMap(persons => {
-            console.log('getPersons - Data:', persons);
             return this.personFacade.getRelationships().pipe(
               catchError(error => {
                 console.error('Error in getRelationships:', error);
                 return of([]);
               }),
               map(relationships => {
-                console.log('getRelationships - Data:', relationships);
                 return { persons, relationships };
               })
             );
@@ -67,7 +64,6 @@ export class TreeViewComponent implements OnInit {
         );
       }),
       map(({ persons, relationships }) => {
-        console.log('map - Data:', { persons, relationships });
         return persons.map(person => {
           const spouses = relationships
             .filter(r => r.person2_id === person.id && r.relationship_type === 'spouse')
@@ -107,7 +103,6 @@ export class TreeViewComponent implements OnInit {
         return of([]);
       })
     ).subscribe(data => {
-      console.log('subscribe - Chart data:', data);
       this.create(data)
     });
   }

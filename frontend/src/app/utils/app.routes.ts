@@ -10,9 +10,13 @@ import { FamilyFormComponent } from '../components/family-form/family-form.compo
 import { FamilyListComponent } from '../components/family-list/family-list.component';
 import { TreeViewComponent } from '../components/tree-view/tree-view.component';
 import { AuthGuard } from './auth.guard';
+import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from '../components/reset-password/reset-password.component';
 
 export const routes: Routes = [
   { path: 'login', component: AuthComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'tree', component: TreeViewComponent, canActivate: [AuthGuard] },
   { path: 'person/:id', component: PersonDetailComponent, canActivate: [AuthGuard] },
   { path: 'person-form', component: PersonFormComponent, canActivate: [AuthGuard] },

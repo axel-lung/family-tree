@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/user';
 import axios from 'axios';
+import { PasswordResetToken } from '../models/password-reset-token';
+import { transporter } from '../config/email';
 
 export const register = async (req: Request, res: Response) => {
   const { email, password, role, captchaToken, first_name, last_name } =
@@ -106,5 +108,68 @@ export const login = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Login failed' });
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Générer un token de réinitialisation
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '15m' });
+    const expiresAt = new Date(Date.now() + 900000); // Expire dans 15 minutes
+
+    // Stocker le token
+    await PasswordResetToken.create({
+      user_id: user.id,
+      token,
+      expires_at: expiresAt,
+    });
+
+    // Envoyer l'e-mail
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+    await transporter.sendMail({
+      to: email,
+      subject: 'Réinitialisation de votre mot de passe',
+      html: `Cliquez sur ce lien pour réinitialiser votre mot de passe : <a href="${resetUrl}">${resetUrl}</a>. Ce lien expire dans 15 minutes.`,
+    });
+
+    res.json({ message: 'E-mail de réinitialisation envoyé' });
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de l\'envoi de l\'e-mail' });
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { token, newPassword } = req.body;
+  try {
+    // Vérifier le token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: number };
+    
+    const resetTokens = await PasswordResetToken.findAll({
+      where: { user_id: decoded.userId },
+      order: [['created_at', 'DESC']],
+    });    
+
+    const resetToken = resetTokens[0]; // le plus récent    
+
+    if (!resetToken || resetToken.expires_at < new Date()) {
+      return res.status(400).json({ error: 'Token invalide ou expiré' });
+    }
+
+    // Mettre à jour le mot de passe
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await User.update({ password: hashedPassword }, { where: { id: decoded.userId } });
+
+    // Supprimer le token utilisé
+    await resetToken.destroy();
+
+    res.json({ message: 'Mot de passe réinitialisé avec succès' });
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la réinitialisation' });
   }
 };

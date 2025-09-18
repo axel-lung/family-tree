@@ -26,6 +26,14 @@ export class ApiService {
     return this.http.post(`${this.apiUrl}/auth/login`, { email, password, captchaToken });
   }
 
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/forgot-password`, { email });
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/reset-password`, { token, newPassword });
+  }
+
   // Personnes
   getPersons(familyId: number): Observable<Person[]> {
     return this.http.get<Person[]>(`${this.apiUrl}/persons/family/${familyId}`, { headers: this.getHeaders() });

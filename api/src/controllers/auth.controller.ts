@@ -140,6 +140,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     res.json({ message: 'E-mail de réinitialisation envoyé' });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: 'Erreur lors de l\'envoi de l\'e-mail' });
   }
 };

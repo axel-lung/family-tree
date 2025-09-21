@@ -43,6 +43,8 @@ jobs:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_NAME: ${{ secrets.DB_NAME }}
           FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           TURNSTILE_SECRET_KEY: ${{ secrets.TURNSTILE_SECRET_KEY }}
           PORT: ${{ secrets.PORT }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}

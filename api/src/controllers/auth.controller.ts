@@ -132,6 +132,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     // Envoyer l'e-mail
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+    console.log("Email User:", process.env.EMAIL_USER);
+    console.log("Email Pass:", process.env.EMAIL_PASS ? "Loaded" : "Missing");
+
     await transporter.sendMail({
       to: email,
       subject: 'Réinitialisation de votre mot de passe',

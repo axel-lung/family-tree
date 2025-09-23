@@ -65,6 +65,8 @@ jobs:
             echo 'DB_NAME=$DB_NAME' >> /opt/family-tree/.env && \
             echo 'DB_HOST=$DB_HOST' >> /opt/family-tree/.env && \
             echo 'FRONTEND_URL=$FRONTEND_URL' >> /opt/family-tree/.env && \
+            echo 'EMAIL_USER=$EMAIL_USER' >> /opt/family-tree/.env && \
+            echo 'EMAIL_PASS=$EMAIL_PASS' >> /opt/family-tree/.env && \
             echo 'TURNSTILE_SECRET_KEY=$TURNSTILE_SECRET_KEY' >> /opt/family-tree/.env && \
             echo 'PORT=$PORT' >> /opt/family-tree/.env && \
             echo 'DB_PASSWORD=\"$DB_PASSWORD\"' >> /opt/family-tree/.env"

@@ -6,6 +6,8 @@ export class Person extends Model {
   public id!: number;
   public user_id!: number | null;
   public first_name!: string;
+  public second_name!: string;
+  public third_name!: string;
   public last_name!: string;
   public gender!: string | null;
   public birth_date!: Date | null;
@@ -35,6 +37,14 @@ Person.init(
       references: { model: 'users', key: 'id' },
     },
     first_name: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    second_name: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    third_name: {
       type: DataTypes.STRING(100),
       allowNull: false,
     },

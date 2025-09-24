@@ -11,6 +11,8 @@ export interface Person {
   id: number;
   user_id?: number;
   first_name: string;
+  second_name: string;
+  third_name: string;
   last_name: string;
   gender?: 'M' | 'F';
   birth_date?: Date;

@@ -87,6 +87,12 @@ export class MenubarComponent implements OnInit {
       routerLink: ['/tree'],
     });
 
+    this.items.push({
+      label: `Liste des membres`,
+      icon: 'pi pi-list',
+      routerLink: ['/person-list'],
+    });
+
     if (this.user?.role === 'admin') {
       this.items.push({
         label: 'Ajouter une personne',

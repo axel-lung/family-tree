@@ -12,6 +12,7 @@ import { TreeViewComponent } from '../components/tree-view/tree-view.component';
 import { AuthGuard } from './auth.guard';
 import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from '../components/reset-password/reset-password.component';
+import { PersonListComponent } from '../components/person-list/person-list.component';
 
 export const routes: Routes = [
   { path: 'login', component: AuthComponent },
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'family-form', component: FamilyFormComponent, canActivate: [AuthGuard] },
   { path: 'family-list', component: FamilyListComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard] },
+  { path: 'person-list', component: PersonListComponent, canActivate: [AuthGuard] },
   { path: 'share/:token', component: ShareComponent },
   { path: '', redirectTo: '/tree', pathMatch: 'full' },
 ];

@@ -11,7 +11,7 @@
         currentPageReportTemplate="Résultats {first} à {last} sur {totalRecords}"
         [filterDelay]="0"
         [globalFilterFields]="['birth_date', 'last_name', 'first_name']"
-        sortField="birth_date"
+        sortField="first_name"
         [sortOrder]="1"
     >
         <ng-template #caption>
@@ -55,22 +55,37 @@
             </tr>
         </ng-template>
         <ng-template #body let-person>
-            <tr class="p-selectable-row">
+            <tr (click)="view(person.id)" class="p-selectable-row cursor-pointer">
                 <td>
                     <p-tableCheckbox [value]="person" />
                 </td>
-                <td class="flex align-items-center gap-2 ">
-                    <img class="border-circle" width="50" height="50" src="{{ person.avatar }}">
-                    <span>{{ person.first_name }}</span>
+                <td>
+                    <div class="flex align-items-center gap-2">
+                        <img
+                            class="border-circle"
+                            width="50"
+                            height="50"
+                            [src]="person.avatar || 'https://ui-avatars.com/api/?background=' + (person.gender === 'M' ? '789FAC' : 'C48A92') + '&name=' + person.first_name + '+' + person.last_name"
+                        >
+                        <span>{{ person.first_name }}</span>
+                    </div>
                 </td>
                 <td>
                     {{ person.last_name }}
                 </td>
                 <td>
-                    {{ person.birth_date | date:'dd/MM/yyyy' }}
+                    <div class="flex align-items-center gap-2">
+                        {{ person.birth_date | date:'dd/MM/yyyy' }} <i *ngIf="person.birth_date &&
+                                person.birth_date.getDate() === (today.getDate()) &&
+                                person.birth_date.getMonth() === (today.getMonth())"
+                        class="text-pink-300 pi pi-gift"></i>
+                    </div>
                 </td>
                 <td style="text-align: center">
-                    <p-button (click)="edit(person.id)" rounded icon="pi pi-pencil" />
+                    <div class="flex gap-2">
+                        <p-button severity="info" (click)="view(person.id)" rounded icon="pi pi-eye" />
+                        <p-button (click)="edit(person.id)" rounded icon="pi pi-pencil" />
+                    </div>
                 </td>
             </tr>
         </ng-template>

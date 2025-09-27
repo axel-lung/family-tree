@@ -2,7 +2,10 @@
 <div style='padding-top: 70px;'>
     
     <p-card *ngIf="person">   
-        <p-button styleClass="p-button-outlined pt-1 pb-1 pl-2 pr-2" label="Retour à l'arbre" (click)="goToTree()"></p-button>
+        <div class="flex gap-2">
+            <p-button styleClass="p-button-outlined pt-1 pb-1 pl-2 pr-2" label="Retour à l'arbre" (click)="goToTree()"></p-button>
+            <p-button styleClass="p-button-outlined pt-1 pb-1 pl-2 pr-2" label="Retour à la liste des membres" (click)="goToList()"></p-button>
+        </div>
         <div class="flex">
             <div class="col-6 mt-4">
                 <h1 [ngClass]="person.gender === 'M' ? 'male' : 'female'">{{ person.first_name }} {{ person.second_name }} {{ person.third_name }} {{ person.last_name }} - {{ person.gender }}</h1>

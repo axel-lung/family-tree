@@ -40,6 +40,7 @@ export class PersonListComponent {
   loading: boolean = true;
   persons = [{}];
   searchValue: string = "";
+  today: Date = new Date();
 
   constructor(
     private readonly personFacade: PersonFacade,
@@ -132,6 +133,10 @@ export class PersonListComponent {
   }
 
   edit(id: number) {
-  this.router.navigate([`/person-form/${id}`]);
-}
+    this.router.navigate([`/person-form/${id}`]);
+  }
+
+  view(id: number) {
+    this.router.navigate([`/person/${id}`]);
+  }
 }

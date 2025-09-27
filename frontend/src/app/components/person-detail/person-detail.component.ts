@@ -123,6 +123,10 @@ export class PersonDetailComponent implements OnInit {
     this.router.navigate(['/tree']);
   }
 
+  goToList() {
+    this.router.navigate(['/person-list']);
+  }
+
   calculateAge(person: Person): number | string {
     if (!person.birth_date) return 'N/A';
     const birth = new Date(person.birth_date);

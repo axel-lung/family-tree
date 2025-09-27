@@ -89,7 +89,7 @@ export class MenubarComponent implements OnInit {
 
     this.items.push({
       label: `Liste des membres`,
-      icon: 'pi pi-list',
+      icon: 'pi pi-users',
       routerLink: ['/person-list'],
     });
 

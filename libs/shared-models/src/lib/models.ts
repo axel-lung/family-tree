@@ -3,7 +3,7 @@ export interface User {
   first_name: string;
   last_name: string;
   email: string;
-  role: 'admin' | 'family_member' | 'guest';
+  role: 'admin' | 'family_manager' | 'family_member' | 'guest';
   approved: boolean;
 }
 

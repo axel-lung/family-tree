@@ -5,10 +5,11 @@ import {
   getFamilies,
   getFamily,
 } from '../controllers/family.controller';
+import { restrictTo, Role } from '../middleware/rbac.middleware';
 
 const router = Router();
 
-router.get('/', authenticateJWT, getFamilies);
-router.get('/:id', authenticateJWT, getFamily);
-router.post('/', authenticateJWT, restrictToAdmin, createFamily);
+router.get('/', authenticateJWT, restrictTo(Role.FAMILY_MEMBER), getFamilies);
+router.get('/:id', authenticateJWT, restrictTo(Role.FAMILY_MEMBER), getFamily);
+router.post('/', authenticateJWT, restrictTo(Role.ADMIN), createFamily);
 export default router;

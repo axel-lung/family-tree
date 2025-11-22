@@ -2,16 +2,18 @@ import { Router } from 'express';
 import {
   getUsers,
   updateUser,
-  deleteUser,
+  editUser,
   setPermission,
 } from '../controllers/user.controller';
 import { authenticateJWT, restrictToAdmin } from '../middleware/jwt.middleware';
+import { restrictTo, Role } from '../middleware/rbac.middleware';
 
 const router = Router();
 
-router.get('/', authenticateJWT, restrictToAdmin, getUsers);
-router.put('/:id', authenticateJWT, restrictToAdmin, updateUser);
-router.delete('/:id', authenticateJWT, restrictToAdmin, deleteUser);
-router.post('/permissions', authenticateJWT, restrictToAdmin, setPermission);
+router.get('/', authenticateJWT, restrictTo(Role.ADMIN), getUsers);
+router.put('/:id', authenticateJWT, restrictTo(Role.ADMIN), updateUser);
+router.patch('/:id', editUser); 
+router.post('/permissions', authenticateJWT, restrictTo(Role.ADMIN), setPermission);
 
 export default router;
+ 

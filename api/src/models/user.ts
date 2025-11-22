@@ -5,7 +5,7 @@ export class User extends Model {
   public id!: number;
   public email!: string;
   public password!: string;
-  public role!: 'admin' | 'family_member' | 'guest';
+  public role!: 'admin' | 'family_manager' | 'family_member' | 'guest';
   public approved!: boolean;
   public created_at!: Date;
   public updated_at!: Date;
@@ -38,7 +38,7 @@ User.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM('admin', 'family_member', 'guest'),
+      type: DataTypes.ENUM('admin', 'family_manager', 'family_member', 'guest'),
       defaultValue: 'guest',
       allowNull: false,
     },

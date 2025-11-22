@@ -6,15 +6,15 @@ import {
   updatePerson,
   deletePerson,
 } from '../controllers/person.controller';
-import { authenticateJWT } from '../middleware/jwt.middleware';
-import { checkPermission } from '../middleware/rbac.middleware';
+import { authenticateJWT, restrictToAdmin } from '../middleware/jwt.middleware';
+import { restrictTo, Role } from '../middleware/rbac.middleware';
 
 const router = Router();
 
-router.get('/family/:familyId', authenticateJWT, checkPermission('read'), getPersons);
-router.get('/:id', authenticateJWT, checkPermission('read'), getPerson);
-router.post('/', authenticateJWT, checkPermission('create'), createPerson);
-router.put('/:id', authenticateJWT, checkPermission('update'), updatePerson);
-router.delete('/:id', authenticateJWT, checkPermission('delete'), deletePerson);
+router.get('/family/:familyId', authenticateJWT, restrictTo(Role.FAMILY_MEMBER), getPersons);
+router.get('/:id', authenticateJWT, restrictTo(Role.FAMILY_MEMBER), getPerson);
+router.post('/', authenticateJWT, restrictTo(Role.FAMILY_MANAGER), createPerson);
+router.put('/:id', authenticateJWT, restrictTo(Role.FAMILY_MANAGER), updatePerson);
+router.delete('/:id', authenticateJWT, restrictTo(Role.ADMIN), deletePerson);
 
 export default router;

@@ -53,3 +53,49 @@ export const checkPermission = (
     }
   };
 };
+
+export enum Role {
+  FAMILY_MEMBER = "family_member",
+  FAMILY_MANAGER = "family_manager",
+  ADMIN = "admin",
+}
+
+const ROLES_HIERARCHY: Record<Role, number> = {
+  [Role.FAMILY_MEMBER]: 1,
+  [Role.FAMILY_MANAGER]: 2,
+  [Role.ADMIN]: 3,
+};
+
+export const restrictTo = (requiredRole: Role) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized: No token provided' });
+    }
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!, {
+        issuer: process.env.FRONTEND_URL!,
+        audience: 'users',
+      }) as { id: number; role: string };
+
+      // Vérifier si le rôle du JWT est valide
+      const userRole = decoded.role as Role;
+      if (!Object.values(Role).includes(userRole)) {
+        return res.status(403).json({ error: 'Invalid role' });
+      }
+
+      // Comparer les niveaux hiérarchiques
+      if (ROLES_HIERARCHY[userRole] < ROLES_HIERARCHY[requiredRole]) {
+        return res.status(403).json({
+          error: `Access denied: ${requiredRole.replace('_', ' ')} or higher role required`,
+        });
+      }
+
+      req.user = decoded;
+      next();
+    } catch (error) {
+      res.status(401).json({ error: `Invalid token: ${error}` });
+    }
+  };
+};

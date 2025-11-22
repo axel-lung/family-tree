@@ -93,7 +93,7 @@ export class MenubarComponent implements OnInit {
       routerLink: ['/person-list'],
     });
 
-    if (this.user?.role === 'admin') {
+    if (this.user?.role === 'admin' || this.user?.role === 'family_manager') {
       this.items.push({
         label: 'Ajouter une personne',
         icon: 'pi pi-user-plus',
@@ -101,7 +101,7 @@ export class MenubarComponent implements OnInit {
       });
     }
 
-    if (this.user?.role === 'admin') {
+    if (this.user?.role === 'admin' || this.user?.role === 'family_manager') {
       this.items.push({
         label: 'Ajouter une relation',
         icon: 'pi pi-link',

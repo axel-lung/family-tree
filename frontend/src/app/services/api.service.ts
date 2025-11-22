@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Person, Relationship, Family } from '@family-tree-workspace/shared-models';
+import { Person, Relationship, Family, User } from '@family-tree-workspace/shared-models';
 import { environment } from '../environments/environment';
 
 @Injectable({
@@ -75,5 +75,10 @@ export class ApiService {
 
   createFamily(family: Partial<Family>): Observable<Family> {
     return this.http.post<Family>(`${this.apiUrl}/families`, family, { headers: this.getHeaders() });
+  }
+
+  // Admin
+  editUser(id: number, approved: boolean): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/users/${id}`, { approved }, { headers: this.getHeaders() });
   }
 }

@@ -26,12 +26,13 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const editUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findByPk(req.params.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
-    await user.destroy();
-    res.json({ message: 'User deleted' });
+    await user.update(req.body);
+    console.log(req.body)
+    res.json({ message: 'User blocked' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete user:' + error  });
   }

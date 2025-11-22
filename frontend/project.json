@@ -8,12 +8,16 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/frontend",
         "index": "frontend/src/index.html",
         "main": "frontend/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "frontend/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -22,7 +26,11 @@
             "input": "frontend/public"
           }
         ],
-        "styles": ["frontend/src/styles.scss"]
+        "styles": [
+          "frontend/src/styles.scss"
+        ],
+        "serviceWorker": true,
+        "ngswConfigPath": "frontend/ngsw-config.json"
       },
       "configurations": {
         "production": {
@@ -81,7 +89,9 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "frontend/jest.config.ts"
       }

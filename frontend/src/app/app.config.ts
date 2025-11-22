@@ -1,7 +1,7 @@
 import {
   ApplicationConfig,
   importProvidersFrom,
-  provideZoneChangeDetection,
+  provideZoneChangeDetection, isDevMode,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './utils/app.routes';
@@ -23,6 +23,7 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { MessageService } from 'primeng/api';
 import { TextareaModule } from 'primeng/textarea';
 import { FileUploadModule } from 'primeng/fileupload';
+import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -50,6 +51,9 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura,
       },
-    }),
+    }), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          }),
   ],
 };

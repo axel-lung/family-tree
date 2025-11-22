@@ -13,6 +13,7 @@ import { take } from 'rxjs/operators';
 
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { InstallPwaButtonComponent } from '../install-pwa-button/install-pwa-button.component';
 
 @Component({
   selector: 'app-auth',
@@ -27,7 +28,8 @@ import { AuthService } from '../../services/auth.service';
     FieldsetModule,
     TabsModule,
     ToastModule,
-    RouterModule
+    RouterModule,
+    InstallPwaButtonComponent
   ],
   templateUrl: 'auth.component.html',
   providers: [MessageService],

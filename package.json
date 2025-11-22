@@ -11,7 +11,7 @@
     "@angular/cli": "~18.2.11",
     "@angular/compiler-cli": "~18.2.11",
     "@angular/language-service": "~18.2.11",
-    "@angular/pwa": "^21.0.0",
+    "@angular/pwa": "^18.2.20",
     "@eslint/js": "^9.8.0",
     "@nx/angular": "^19.8.14",
     "@nx/cypress": "19.8.14",

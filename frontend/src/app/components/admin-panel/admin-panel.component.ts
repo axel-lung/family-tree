@@ -70,11 +70,7 @@ export class AdminPanelComponent implements OnInit {
   }
 
   loadUsers() {
-    this.http
-      .get<User[]>('http://localhost:3333/api/users', {
-        headers: this.getHeaders(),
-      })
-      .subscribe({
+      return this.apiService.loadUsers().subscribe({
         next: (users) => (this.users = users),
         error: () =>
           this.messageService.add({

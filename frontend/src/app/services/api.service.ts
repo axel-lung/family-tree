@@ -81,4 +81,8 @@ export class ApiService {
   editUser(id: number, approved: boolean): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/users/${id}`, { approved }, { headers: this.getHeaders() });
   }
+  
+  loadUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users`, { headers: this.getHeaders() });
+  }
 }

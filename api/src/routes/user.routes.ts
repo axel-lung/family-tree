@@ -12,7 +12,7 @@ const router = Router();
 
 router.get('/', authenticateJWT, restrictTo(Role.ADMIN), getUsers);
 router.put('/:id', authenticateJWT, restrictTo(Role.ADMIN), updateUser);
-router.patch('/:id', editUser); 
+router.patch('/:id', authenticateJWT, restrictTo(Role.ADMIN), editUser); 
 router.post('/permissions', authenticateJWT, restrictTo(Role.ADMIN), setPermission);
 
 export default router;

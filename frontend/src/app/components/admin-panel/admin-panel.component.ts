@@ -60,7 +60,6 @@ export class AdminPanelComponent implements OnInit {
         return;
       }
       this.loadUsers();
-      this.loadPermissions();
     });
   }
 
@@ -79,26 +78,6 @@ export class AdminPanelComponent implements OnInit {
             detail: 'Impossible de charger les utilisateurs',
           }),
       });
-  }
-
-  loadPermissions() {
-    this.http
-      .get<Permission[]>('http://localhost:3333/api/permissions/0', {
-        headers: this.getHeaders(),
-      })
-      .subscribe({
-        next: (permissions) => (this.permissions = permissions),
-        error: () =>
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erreur',
-            detail: 'Impossible de charger les permissions',
-          }),
-      });
-  }
-
-  editUser(user: User): void {
-    // TODO
   }
 
   manageAcessUser(id: number, active: boolean) {
@@ -123,26 +102,5 @@ export class AdminPanelComponent implements OnInit {
         });
       },
     });
-  }
-
-  updatePermission(perm: Permission) {
-    this.http
-      .post('http://localhost:3333/api/users/permissions', perm, {
-        headers: this.getHeaders(),
-      })
-      .subscribe({
-        next: () =>
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Succès',
-            detail: 'Permission mise à jour',
-          }),
-        error: () =>
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erreur',
-            detail: 'Impossible de mettre à jour la permission',
-          }),
-      });
   }
 }

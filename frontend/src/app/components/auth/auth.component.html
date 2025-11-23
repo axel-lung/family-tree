@@ -26,14 +26,22 @@
           </div>
           <div class="p-field col-12 mb-5">
             <p-fieldset legend="Mot de passe">
-              <input
-                class="w-full"
-                id="password"
-                pInputText
-                [(ngModel)]="password"
-                type="password"
-                (keydown.enter)="login()"
-              />
+              <div class="flex gap-2">
+                <input
+                  class="w-full"
+                  id="password"
+                  pInputText
+                  [(ngModel)]="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  (keydown.enter)="login()"
+                />
+                <button
+                  type="button"
+                  pButton
+                  icon="{{ showPassword ? 'pi pi-eye' : 'pi pi-eye-slash' }}"
+                  (click)="showPassword = !showPassword"
+                ></button>
+              </div>
             </p-fieldset>
           </div>
           <div class="flex flex-column gap-3 align-items-center">
@@ -41,6 +49,7 @@
               label="Connexion"
               (click)="login()"
               onkeypress="login()"
+              [disabled]="!captchaToken"
             ></p-button>
             <a class="text-gray-500 no-underline" [routerLink]="['/forgot-password']"
               >Mot de passe oublié ?</a
@@ -92,14 +101,22 @@
           </div>
           <div class="p-field col-12 mt-3 mb-5">
             <p-fieldset legend="Mot de passe">
-              <input
-                class="w-full"
-                id="password"
-                pInputText
-                [(ngModel)]="password"
-                type="password"
-                (keydown.enter)="register()"
-              />
+              <div class="flex gap-2">
+                <input
+                  class="w-full"
+                  id="password"
+                  pInputText
+                  [(ngModel)]="password"
+                  [type]="showPassword ? 'text' : 'password'"
+                  (keydown.enter)="register()"
+                />
+                <button
+                  type="button"
+                  pButton
+                  icon="{{ showPassword ? 'pi pi-eye' : 'pi pi-eye-slash' }}"
+                  (click)="showPassword = !showPassword"
+                ></button>
+              </div>
             </p-fieldset>
           </div>
           <p-button
@@ -107,6 +124,7 @@
             label="Envoyer la demande"
             (click)="register()"
             (keydown.enter)="register()"
+            [disabled]="!captchaToken"
             type="submit"
           ></p-button>
         </div>

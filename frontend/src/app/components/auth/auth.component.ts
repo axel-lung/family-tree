@@ -10,6 +10,7 @@ import { ToastModule } from 'primeng/toast';
 import { Router, RouterModule } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { take } from 'rxjs/operators';
+import { NgZone } from '@angular/core';
 
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
@@ -41,6 +42,7 @@ export class AuthComponent implements OnInit {
   password = '';
   role: 'guest' | 'admin' | 'user' = 'guest';
   captchaToken = '';
+  showPassword = false;
 
   private scriptLoaded = false;
   private widgetId?: string;
@@ -51,9 +53,10 @@ export class AuthComponent implements OnInit {
     private readonly router: Router,
     private readonly messageService: MessageService,
     private readonly el: ElementRef,
+    private readonly zone: NgZone
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.loadTurnstileScript(() => this.renderTurnstile());
   }
 
@@ -86,7 +89,11 @@ export class AuthComponent implements OnInit {
 
     this.widgetId = (window as any).turnstile.render(container, {
       sitekey: '0x4AAAAAABlzlgQkHqL3WmTc', 
-      callback: (token: string) => (this.captchaToken = token),
+      callback: (token: string) => {
+        this.zone.run(() => {
+          this.captchaToken = token;
+        });
+      } 
     });
   }
 

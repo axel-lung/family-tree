@@ -79,7 +79,7 @@ export class PersonFormComponent implements OnInit {
   onUpload(event: FileUploadHandlerEvent) {
     if (event.files && event.files.length > 0) {
       const file = event.files[0]; // fichier sélectionné
-      if (file.size > 2 * 1024 * 1024) { // 2MB
+      if (file.size > 8 * 1024 * 1024) { // 2MB
         alert('Fichier trop lourd !');
         return;
       }

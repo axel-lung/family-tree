@@ -41,9 +41,9 @@ export class AdminPanelComponent implements OnInit {
   users: User[] = [];
   permissions: Permission[] = [];
   searchValue: string = "";
+  roles = ["admin", "family_manager", "family_member", "guest"]
 
   constructor(
-    private readonly http: HttpClient,
     private readonly authService: AuthService,
     private readonly messageService: MessageService,
     private readonly apiService: ApiService
@@ -63,11 +63,6 @@ export class AdminPanelComponent implements OnInit {
     });
   }
 
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  }
-
   loadUsers() {
       return this.apiService.loadUsers().subscribe({
         next: (users) => (this.users = users),
@@ -81,17 +76,35 @@ export class AdminPanelComponent implements OnInit {
   }
 
   manageAcessUser(id: number, active: boolean) {
+    let detail = 'Utilisateur ';
+    detail += active ? 'débloqué' : 'bloqué';
     return this.apiService.editUser(id, active).subscribe({
       next: () => {
         this.users = this.users.filter((u) => u.id !== id);
-        let detail = 'Utilisateur ';
-
-        detail += active ? 'débloqué' : 'bloqué';
-
         this.messageService.add({
           severity: 'success',
           summary: 'Succès',
-          detail: 'Utilisateur débloqué',
+          detail: detail,
+        });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: "Erreur lors de la mise à jour de l'utilisateur",
+        });
+      },
+    });
+  }
+
+  updateRole(id: number, role: string) {
+    return this.apiService.editUser(id, {role: role}).subscribe({
+      next: () => {
+        this.users = this.users.filter((u) => u.id !== id);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Succès',
+          detail: 'Utilisateur modifié',
         });
       },
       error: () => {

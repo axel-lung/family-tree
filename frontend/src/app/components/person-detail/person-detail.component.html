@@ -38,14 +38,14 @@
             </div> 
         </div>
         <div class="mt-6 flex col-4 gap-3">
-            <p-button label="Modifier" (click)="editPerson()" *ngIf="canEdit"></p-button>
+            <p-button label="Modifier" (click)="editPerson()" *ngIf="user?.role === 'family_manager' || user?.role === 'admin'"></p-button>
             <p-button
                 label="Supprimer"
                 (click)="deletePerson()"
                 styleClass="p-button-danger"
                 *ngIf="canDelete"
             ></p-button>
-            <p-button label="Partager" (click)="sharePerson()" *ngIf="canEdit"></p-button>
+            <!-- <p-button label="Partager" (click)="sharePerson()" *ngIf="canEdit"></p-button> -->
         </div>
     </p-card>  
 </div>

@@ -19,6 +19,7 @@ export const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'tree', component: TreeViewComponent, canActivate: [AuthGuard] },
+  { path: 'tree/:id', component: TreeViewComponent, canActivate: [AuthGuard] },
   { path: 'person/:id', component: PersonDetailComponent, canActivate: [AuthGuard] },
   { path: 'person-form', component: PersonFormComponent, canActivate: [AuthGuard] },
   { path: 'person-form/:id', component: PersonFormComponent, canActivate: [AuthGuard] },

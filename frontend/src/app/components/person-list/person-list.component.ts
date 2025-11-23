@@ -139,4 +139,8 @@ export class PersonListComponent {
   view(id: number) {
     this.router.navigate([`/person/${id}`]);
   }
+
+  goToTree(id: number){
+    this.router.navigate([`/tree/${id}`]);
+  }
 }

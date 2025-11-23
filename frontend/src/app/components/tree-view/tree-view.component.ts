@@ -5,6 +5,7 @@ import { Family } from '@family-tree-workspace/shared-models';
 import { PersonFacade } from '../../services/person-facade.service';
 import { FamilyService } from '../../services/family.service';
 import { catchError, concatMap, map, of, Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tree-view',
@@ -29,10 +30,12 @@ export class TreeViewComponent implements OnInit {
 
   family: Family = {id: 0, name: ""};
   familySubscription: any = new Subject<void>()
+  mainId: number = 1
 
   constructor(
     private readonly personFacade: PersonFacade,
-    private readonly familyService: FamilyService
+    private readonly familyService: FamilyService,
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -103,6 +106,8 @@ export class TreeViewComponent implements OnInit {
         return of([]);
       })
     ).subscribe(data => {
+      const id = Number(this.route.snapshot.paramMap.get('id'));
+      if (!isNaN(id)) this.mainId = id;
       this.create(data)
     });
   }
@@ -127,7 +132,10 @@ export class TreeViewComponent implements OnInit {
       .setMiniTree(true)
       .setStyle('imageRect')
       .setOnHoverPathToMain();
-
+    f3Chart.updateMainId(this.mainId);
     f3Chart.updateTree({ initial: true });
+
+    
+     
   }
 }

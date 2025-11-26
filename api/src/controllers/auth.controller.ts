@@ -99,9 +99,9 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, role: user.role },
+      { id: user.id, role: user.role, first_name: user.first_name, last_name: user.last_name },
       process.env.JWT_SECRET,
-      { expiresIn: '1d', issuer: process.env.FRONTEND_URL!, audience: 'users' }
+      { expiresIn: '10d', issuer: process.env.FRONTEND_URL!, audience: 'users' }
     );
 
     res.json({ token });

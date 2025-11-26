@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -53,83 +53,101 @@ export class AuthComponent implements OnInit {
     private readonly router: Router,
     private readonly messageService: MessageService,
     private readonly el: ElementRef,
-    private readonly zone: NgZone
+    private readonly zone: NgZone,
+    private cdr: ChangeDetectorRef,
   ) {}
 
-  ngOnInit(): void {    
-    this.loadTurnstileScript(() => this.renderTurnstile());
+  ngOnInit(): void {
+    this.loadTurnstileExplicit();
   }
 
-  // ---- CAPTCHA ----
-  private loadTurnstileScript(callback: () => void): void {
-    if (this.scriptLoaded) {
-      callback();
+  ngOnDestroy(): void {
+    if (this.widgetId && (window as any).turnstile) {
+      (window as any).turnstile.remove(this.widgetId);
+    }
+  }
+
+  // 1. Chargement du script en mode "explicit" (recommandé par Cloudflare)
+  private loadTurnstileExplicit(): void {
+    if ((window as any).turnstile) {
+      this.renderInvisibleTurnstile();
       return;
     }
 
     const script = document.createElement('script');
-    script.src =
-      'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback';
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    script.async = true;
     script.defer = true;
-
-    (window as any).onloadTurnstileCallback = () => {
-      this.scriptLoaded = true;
-      callback();
-    };
-
-    document.body.appendChild(script);
+    script.onload = () => this.renderInvisibleTurnstile();
+    document.head.appendChild(script);
   }
 
-  private renderTurnstile(): void {
-    const container = this.el.nativeElement.querySelector('#captcha');
-    if (!(window as any).turnstile || !container) {
-      console.error('Turnstile API non disponible');
-      return;
-    }
+  // 2. Render invisible (aucun widget visible !)
+  private renderInvisibleTurnstile(): void {
+    if (!(window as any).turnstile) return;
 
-    this.widgetId = (window as any).turnstile.render(container, {
-      sitekey: '0x4AAAAAABlzlgQkHqL3WmTc', 
+    this.widgetId = (window as any).turnstile.render('#turnstile-invisible', {
+      sitekey: '0x4AAAAAABlzlgQkHqL3WmTc', // ← Utilise un sitekey invisible (1x...)
+      
+      retry: 'auto',
+      'retry-delay': 2000,
       callback: (token: string) => {
+        console.log('Turnstile invisible OK → token reçu');
         this.zone.run(() => {
           this.captchaToken = token;
+          this.cdr.detectChanges();
         });
-      } 
+      },
+      'error-callback': (err: string) => {
+        alert(err)
+        this.captchaToken = '';
+      },
+      'expired-callback': () => {
+        this.captchaToken = '';
+      }
     });
   }
 
-  private resetCaptcha(): void {
-    if (this.widgetId) {
-      (window as any).turnstile.reset(this.widgetId);
-      this.captchaToken = '';
-    }
-  }
+  private executeTurnstile(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (!this.widgetId || !(window as any).turnstile) {
+        reject('Turnstile non disponible');
+        return;
+      }
 
-  private ensureCaptchaValid(): boolean {
-    if (!this.captchaToken) {
-      this.showError('Captcha non validé');
-      return false;
-    }
-    return true;
+      // Callback temporaire
+      const tempCallback = (token: string) => {
+        resolve(token);
+      };
+
+      (window as any).turnstile.execute(this.widgetId, {
+        callback: tempCallback
+      });
+    });
   }
 
   
-  login(): void {
-    if (!this.ensureCaptchaValid()) return;
+  async login(): Promise<void> {
+    try {
+      const token = await this.executeTurnstile(); // ← Ici on force l'exécution
+      this.captchaToken = token;
 
-    this.apiService
-      .login(this.email, this.password, this.captchaToken)
-      .pipe(take(1))
-      .subscribe({
-        next: ({ token }) => {
-          this.authService.setUser(token);
-          this.router.navigate(['/family-list']);
-        },
-        error: (err) => this.handleApiError(err),
-      });
+      this.apiService.login(this.email, this.password, token)
+        .pipe(take(1))
+        .subscribe({
+          next: ({ token }) => {
+            this.authService.setUser(token);
+            this.router.navigate(['/family-list']);
+          },
+          error: (err) => this.handleApiError(err)
+        });
+    } catch (err) {
+      this.showError('Impossible de valider le captcha. Réessayez.');
+    }
   }
 
   register(): void {
-    if (!this.ensureCaptchaValid()) return;
+    // if (!this.ensureCaptchaValid()) return;
 
     if (!this.isPasswordValid(this.password)) {
       this.showError(
@@ -169,8 +187,9 @@ export class AuthComponent implements OnInit {
 
   private handleApiError(err: any): void {
     console.error(err);
+    alert(JSON.stringify(err))
     this.showError(err?.error ?? 'Erreur inconnue');
-    this.resetCaptcha();
+    // this.resetCaptcha();
   }
 
   private showError(detail: string): void {

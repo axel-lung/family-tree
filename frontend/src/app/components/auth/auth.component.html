@@ -1,9 +1,14 @@
 <p-toast></p-toast>
+
 <p-card
   [style]="{ overflow: 'hidden', background: 'none' }"
   class="flex justify-content-center align-items-center h-screen"
 >
-  <div id="captcha"></div>
+<p class="mb-2 text-xs text-gray-500 text-center mt-4">
+  Ce site est protégé par Cloudflare Turnstile.
+</p>
+  <!-- Le conteneur peut être caché, il n’y a rien de visible ! -->
+<div id="turnstile-invisible"></div>
   <p-tabs value="0">
     <p-tablist>
       <p-tab style="width: 50%" value="0">Se connecter</p-tab>
@@ -49,7 +54,6 @@
               label="Connexion"
               (click)="login()"
               onkeypress="login()"
-              [disabled]="!captchaToken"
             ></p-button>
             <a class="text-gray-500 no-underline" [routerLink]="['/forgot-password']"
               >Mot de passe oublié ?</a

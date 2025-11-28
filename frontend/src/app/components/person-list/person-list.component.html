@@ -13,6 +13,7 @@
         [globalFilterFields]="['birth_date', 'last_name', 'first_name']"
         sortField="first_name"
         [sortOrder]="1"
+        class="hidden md:block"
     >
         <ng-template #caption>
             <div class="flex justify-between">
@@ -96,4 +97,44 @@
             </tr>
         </ng-template>
     </p-table>
+
+    <!-- RESPONSIVE -->
+
+    <p-dataview class="block md:hidden" [value]="filteredPersons">
+        <ng-template #header>
+            <div class="flex flex-col md:flex-row md:justify-between">
+                <input pInputText type="text" [(ngModel)]="searchValue" (ngModelChange)="filterPersons()" placeholder="Rechercher..." />
+            </div>
+        </ng-template>
+        <ng-template #list let-persons>
+            <div class="w-full">
+                <div class="col-span-12" *ngFor="let person of persons;">
+                    <div class="p-5 border-bottom-1 flex flex-col justify-content-start align-items-center">
+                        <div class="w-full flex flex-row justify-content-start align-items-center">
+                            <img
+                                    class="border-circle m-2"
+                                    width="50"
+                                    height="50"
+                                    [src]="person.avatar || 'https://ui-avatars.com/api/?background=' + (person.gender === 'M' ? '789FAC' : 'C48A92') + '&name=' + person.first_name + '+' + person.last_name"
+                                >
+                            <div class="flex flex-col flex-wrap	">
+                                <span class="font-bold w-full">{{ person.first_name }} {{ person.last_name }}</span>
+                                <div>
+                                    {{ person.birth_date | date:'dd/MM/yyyy' }} <i *ngIf="person.birth_date &&
+                                        person.birth_date.getDate() === (today.getDate()) &&
+                                        person.birth_date.getMonth() === (today.getMonth())"
+                                    class="text-pink-300 pi pi-gift"></i>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="flex gap-2">
+                            <p-button severity="info" (click)="view(person.id)" rounded icon="pi pi-eye" />
+                            <p-button (click)="edit(person.id)" rounded icon="pi pi-pencil" />
+                            <p-button severity="success" (click)="goToTree(person.id)" rounded icon="pi pi-sitemap" />
+                        </div>                       
+                    </div>                         
+                </div>
+            </div>
+        </ng-template>
+    </p-dataview>
 </div>

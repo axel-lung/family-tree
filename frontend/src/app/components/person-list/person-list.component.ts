@@ -4,17 +4,17 @@ import { Family } from '@family-tree-workspace/shared-models';
 import { catchError, concatMap, map, of, Subject } from 'rxjs';
 import { PersonFacade } from '../../services/person-facade.service';
 import { FamilyService } from '../../services/family.service';
-import { Table, TableModule } from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
+import { SelectItem, SelectModule } from 'primeng/select';
 import { Router } from '@angular/router';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { FormsModule } from '@angular/forms';
-
+import { DataView } from 'primeng/dataview';
 
 @Component({
   selector: 'app-person-list',
@@ -30,6 +30,7 @@ import { FormsModule } from '@angular/forms';
     MultiSelectModule,
     InputTextModule,
     SelectModule,
+    DataView,
   ],
   templateUrl: './person-list.component.html',
   styleUrl: './person-list.component.css',
@@ -39,7 +40,8 @@ export class PersonListComponent {
   familySubscription: any = new Subject<void>();
   loading: boolean = true;
   persons = [{}];
-  searchValue: string = "";
+  filteredPersons = [{}];
+  searchValue: string = '';
   today: Date = new Date();
 
   constructor(
@@ -107,8 +109,9 @@ export class PersonListComponent {
                 r.person2_id === person.id && r.relationship_type === 'father'
             )?.person1_id;
 
-            if (person?.birth_date) person.birth_date = new Date(person.birth_date)               
-            
+            if (person?.birth_date)
+              person.birth_date = new Date(person.birth_date);
+
             return {
               id: person.id,
               gender: person.gender,
@@ -128,6 +131,7 @@ export class PersonListComponent {
       )
       .subscribe((data) => {
         this.persons = data;
+        this.filteredPersons = this.persons;
         this.loading = false;
       });
   }
@@ -140,7 +144,15 @@ export class PersonListComponent {
     this.router.navigate([`/person/${id}`]);
   }
 
-  goToTree(id: number){
+  goToTree(id: number) {
     this.router.navigate([`/tree/${id}`]);
+  }
+
+  filterPersons() {
+    const query = this.searchValue.toLowerCase();
+
+    this.filteredPersons = this.persons.filter((p) =>
+      JSON.stringify(p).toLowerCase().includes(query)
+    );
   }
 }

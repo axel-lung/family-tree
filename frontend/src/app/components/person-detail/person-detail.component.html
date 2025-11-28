@@ -6,8 +6,8 @@
             <p-button styleClass="p-button-outlined pt-1 pb-1 pl-2 pr-2" label="Retour à l'arbre" (click)="goToTree()"></p-button>
             <p-button styleClass="p-button-outlined pt-1 pb-1 pl-2 pr-2" label="Retour à la liste des membres" (click)="goToList()"></p-button>
         </div>
-        <div class="flex">
-            <div class="col-6 mt-4">
+        <div class="flex flex-column md:flex-row">
+            <div class="col-12 md:col-6 mt-4">
                 <h1 [ngClass]="person.gender === 'M' ? 'male' : 'female'">{{ person.first_name }} {{ person.second_name }} {{ person.third_name }} {{ person.last_name }} - {{ person.gender }}</h1>
                 <p>
                     Né<span *ngIf="person.gender === 'F'">e</span>
@@ -33,7 +33,7 @@
                     <strong>Résidence :</strong> {{ person.residence }}
                 </p>
             </div> 
-            <div class="col-6 mt-4">
+            <div class="col-12 md:col-6 mt-4">
                 <img alt="Image de {{ person.first_name }} {{ person.last_name }}" [src]="person.photo" *ngIf="person.photo" width="300" />
             </div> 
         </div>

@@ -51,11 +51,11 @@ export class PersonDetailComponent implements OnInit {
           //       canUpdate || this.isOwnProfile || this.user?.role === 'admin';
           //   });
           this.canEdit = true
-          this.permissionService
-            .checkPermission(this.user.id, id, 'can_delete')
-            .subscribe((canDelete) => {
-              this.canDelete = canDelete || this.user?.role === 'admin';
-            });
+          // this.permissionService
+          //   .checkPermission(this.user.id, id, 'can_delete')
+          //   .subscribe((canDelete) => {
+          //     this.canDelete = canDelete || this.user?.role === 'admin';
+          //   });
         }
       });
     });

@@ -13,6 +13,8 @@ import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../services/auth.service';
 import { User } from '@family-tree-workspace/shared-models';
 import { FamilyService } from '../../services/family.service';
+import { Toolbar } from 'primeng/toolbar';
+import { SpeedDial } from 'primeng/speeddial';
 
 @Component({
   selector: 'app-menubar',
@@ -28,32 +30,16 @@ import { FamilyService } from '../../services/family.service';
     InputGroupAddonModule,
     InputGroupModule,
     ButtonModule,
+    Toolbar,
+    SpeedDial,
   ],
-  template: `
-    <p-menubar class="fixed z-5 w-full" [model]="items">
-      <ng-template #start> </ng-template>
-
-      <ng-template #end>
-        <div class="flex gap-2">
-          <!-- <p-inputgroup>
-            <input pInputText placeholder="Prénom NOM" />
-            <p-button label="Chercher" />
-          </p-inputgroup> -->
-          <p-button
-            *ngIf="isAuthenticated"
-            label="Déconnexion"
-            (click)="logout()"
-            styleClass="p-button-outlined"
-          ></p-button>
-        </div>
-      </ng-template>
-    </p-menubar>
-  `,
+  templateUrl: './menubar.component.html',
   styles: [],
 })
 export class MenubarComponent implements OnInit {
-  user: User | null = null;
+  user: User | any = null;
   items: MenuItem[] = [];
+  profileItems: MenuItem[] = [];
   isAuthenticated: boolean = false;
   isFamilySelected: boolean = false;
   familyName: string | undefined;
@@ -124,6 +110,24 @@ export class MenubarComponent implements OnInit {
         routerLink: ['/admin'],
       });
     }
+
+    // profile items
+    this.profileItems.push({
+      label: 'Paramètres',
+      icon: 'pi pi-cog',
+      command: () => {
+        this.router.navigate(['/settings']);
+      }
+    });
+
+    this.profileItems.push({
+      label: 'Deconnexion',
+      icon: 'pi pi-sign-out',
+      command: () => {
+        this.logout();
+      }
+    });
+    
   }
 
   logout() {

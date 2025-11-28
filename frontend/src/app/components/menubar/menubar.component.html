@@ -1,1 +1,33 @@
-<p>Menubar works!</p>
+<p-menubar class="fixed z-5 w-full" [model]="items">
+  <ng-template #start> </ng-template>
+  <ng-template #end>
+      <p-speeddial
+        *ngIf="isAuthenticated"
+        [model]="profileItems"
+        direction="down"
+        [transitionDelay]="80"
+        [style]="{ position: 'absolute', right: '0rem', top: '0.5rem' }" 
+      >
+        <ng-template #button let-toggleCallback="toggleCallback">
+          <p-button
+            outlined
+            styleClass="border"
+            (click)="toggleCallback($event)"
+          >
+            {{ user?.first_name[0] + user?.last_name[0] }}
+          </p-button>
+        </ng-template>
+        <ng-template #item let-item let-toggleCallback="toggleCallback">
+          <div
+            class="flex flex-col items-center justify-between gap-2 p-2 border rounded border-surface-200 dark:border-surface-700 w-20 cursor-pointer"
+            (click)="toggleCallback($event, item)"
+          >
+            <span [class]="item.icon"></span>
+            <span>
+              {{ item.label }}
+            </span>
+          </div>
+        </ng-template>
+      </p-speeddial>
+  </ng-template>
+</p-menubar>

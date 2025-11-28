@@ -13,6 +13,7 @@ import { AuthGuard } from './auth.guard';
 import { ForgotPasswordComponent } from '../components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from '../components/reset-password/reset-password.component';
 import { PersonListComponent } from '../components/person-list/person-list.component';
+import { SettingsComponent } from '../components/settings/settings.component';
 
 export const routes: Routes = [
   { path: 'login', component: AuthComponent },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'tree', component: TreeViewComponent, canActivate: [AuthGuard] },
   { path: 'tree/:id', component: TreeViewComponent, canActivate: [AuthGuard] },
+  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
   { path: 'person/:id', component: PersonDetailComponent, canActivate: [AuthGuard] },
   { path: 'person-form', component: PersonFormComponent, canActivate: [AuthGuard] },
   { path: 'person-form/:id', component: PersonFormComponent, canActivate: [AuthGuard] },

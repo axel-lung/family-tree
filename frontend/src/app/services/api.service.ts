@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Person, Relationship, Family, User } from '@family-tree-workspace/shared-models';
+import { Person, Relationship, Family, User, UsersFamilies } from '@family-tree-workspace/shared-models';
 import { environment } from '../environments/environment';
 
 @Injectable({
@@ -18,8 +18,8 @@ export class ApiService {
   }
 
   // Authentification
-  register(email: string, password: string, role: string, first_name: string, last_name: string, captchaToken: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/register`, { email, password, role, first_name, last_name, captchaToken });
+  register(email: string, password: string, role: string, first_name: string, last_name: string, captchaToken: string, family_id: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/register`, { email, password, role, first_name, last_name, captchaToken, family_id });
   }
 
   login(email: string, password: string, captchaToken: string): Observable<any> {
@@ -84,5 +84,9 @@ export class ApiService {
 
   loadUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/users`, { headers: this.getHeaders() });
+  }
+
+  getUsersFamiliesFromUser(id: number): Observable<UsersFamilies[]> {
+    return this.http.get<UsersFamilies[]>(`${this.apiUrl}/users-families/${id}`, { headers: this.getHeaders() });
   }
 }

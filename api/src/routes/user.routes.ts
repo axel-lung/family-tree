@@ -5,7 +5,7 @@ import {
   editUser,
   setPermission,
 } from '../controllers/user.controller';
-import { authenticateJWT, restrictToAdmin } from '../middleware/jwt.middleware';
+import { authenticateJWT } from '../middleware/jwt.middleware';
 import { restrictTo, Role } from '../middleware/rbac.middleware';
 
 const router = Router();

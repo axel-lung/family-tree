@@ -103,6 +103,17 @@
               />
             </p-fieldset>
           </div>
+          <div class="p-field col-12 mt-3">
+            <p-select
+              [options]="families"
+              [(ngModel)]="family_id"
+              optionLabel="name"
+              optionValue="id"
+              [filter]="true"
+              placeholder="Choisir la famille sur laquelle je veux être rattachée"
+              class="w-full md:w-56"
+            />
+          </div>
           <div class="p-field col-12 mt-3 mb-5">
             <p-fieldset legend="Mot de passe">
               <div class="flex gap-2">

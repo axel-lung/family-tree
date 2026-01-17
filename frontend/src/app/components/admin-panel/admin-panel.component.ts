@@ -4,7 +4,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
-import { User, Permission } from '@family-tree-workspace/shared-models';
+import { User, Permission, UsersFamilies } from '@family-tree-workspace/shared-models';
 import { AuthService } from '../../services/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
@@ -16,6 +16,8 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
+import { FamilyFacade } from '../../services/family-facade.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-admin-panel',
@@ -42,15 +44,19 @@ export class AdminPanelComponent implements OnInit {
   permissions: Permission[] = [];
   searchValue: string = "";
   roles = ["admin", "family_manager", "family_member", "guest"]
+  currentUserId!: number;
+  usersfamilies: UsersFamilies[] | null = []
 
   constructor(
     private readonly authService: AuthService,
     private readonly messageService: MessageService,
-    private readonly apiService: ApiService
+    private readonly apiService: ApiService,
+    private readonly familyFacade: FamilyFacade
   ) {}
 
   ngOnInit() {
     this.authService.getUser().subscribe((user) => {
+      if(user?.id) this.currentUserId = user.id
       if (user?.role !== 'admin') {
         this.messageService.add({
           severity: 'error',
@@ -61,7 +67,17 @@ export class AdminPanelComponent implements OnInit {
       }
       this.loadUsers();
     });
-  }
+
+    this.familyFacade.getUsersFamiliesFromUser(this.currentUserId).subscribe({
+      next: (usersfamilies) => (this.usersfamilies = usersfamilies),
+      error: () =>
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail: 'Impossible de charger les users families',
+          }),
+      });
+    }
 
   loadUsers() {
       return this.apiService.loadUsers().subscribe({

@@ -28,6 +28,7 @@ export const routes: Routes = [
   { path: 'relationship-form', component: RelationshipFormComponent, canActivate: [AuthGuard] },
   { path: 'family-form', component: FamilyFormComponent, canActivate: [AuthGuard] },
   { path: 'family-list', component: FamilyListComponent, canActivate: [AuthGuard] },
+  { path: 'users-families/:id', component: AdminPanelComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard] },
   { path: 'person-list', component: PersonListComponent, canActivate: [AuthGuard] },
   { path: 'share/:token', component: ShareComponent },

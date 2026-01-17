@@ -9,7 +9,7 @@ import { restrictTo, Role } from '../middleware/rbac.middleware';
 
 const router = Router();
 
-router.get('/', authenticateJWT, restrictTo(Role.FAMILY_MEMBER), getFamilies);
+router.get('/', getFamilies);
 router.get('/:id', authenticateJWT, restrictTo(Role.FAMILY_MEMBER), getFamily);
 router.post('/', authenticateJWT, restrictTo(Role.ADMIN), createFamily);
 export default router;

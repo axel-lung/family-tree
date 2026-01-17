@@ -10,6 +10,7 @@ import permissionRoutes from './routes/permission.routes';
 import userRoutes from './routes/user.routes';
 import shareRoutes from './routes/share.routes';
 import familyRoutes from './routes/family.routes';
+import usersFamiliesRoutes from './routes/users-families.routes';
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ app.use('/api/permissions', permissionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/share', shareRoutes);
 app.use('/api/families', familyRoutes);
+app.use('/api/users-families', usersFamiliesRoutes);
 
 async function bootstrap() {
   try {

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { FieldsetModule } from 'primeng/fieldset';
+import { Fieldset, FieldsetModule } from 'primeng/fieldset';
 import { TabsModule } from 'primeng/tabs';
 import { ToastModule } from 'primeng/toast';
 import { Router, RouterModule } from '@angular/router';
@@ -15,6 +15,8 @@ import { NgZone } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { InstallPwaButtonComponent } from '../install-pwa-button/install-pwa-button.component';
+import { FamilyFacade } from '../../services/family-facade.service';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-auth',
@@ -30,7 +32,9 @@ import { InstallPwaButtonComponent } from '../install-pwa-button/install-pwa-but
     TabsModule,
     ToastModule,
     RouterModule,
-    InstallPwaButtonComponent
+    InstallPwaButtonComponent,
+    Select,
+    Fieldset
   ],
   templateUrl: 'auth.component.html',
   providers: [MessageService],
@@ -43,9 +47,10 @@ export class AuthComponent implements OnInit {
   role: 'guest' | 'admin' | 'user' = 'guest';
   captchaToken = '';
   showPassword = false;
+  family_id = 0;
 
-  private scriptLoaded = false;
   private widgetId?: string;
+  families: { id: number; name: string }[] = [];
 
   constructor(
     private readonly apiService: ApiService,
@@ -55,10 +60,17 @@ export class AuthComponent implements OnInit {
     private readonly el: ElementRef,
     private readonly zone: NgZone,
     private cdr: ChangeDetectorRef,
+    private readonly familyFacade: FamilyFacade,
   ) {}
 
   ngOnInit(): void {
     this.loadTurnstileExplicit();
+    this.familyFacade.getFamilies().subscribe((families) => {
+      this.families = families.map((f) => ({
+        id: f.id,
+        name: f.name,
+      }));
+    });
   }
 
   ngOnDestroy(): void {
@@ -92,14 +104,12 @@ export class AuthComponent implements OnInit {
       retry: 'auto',
       'retry-delay': 2000,
       callback: (token: string) => {
-        console.log('Turnstile invisible OK → token reçu');
         this.zone.run(() => {
           this.captchaToken = token;
           this.cdr.detectChanges();
         });
       },
       'error-callback': (err: string) => {
-        alert(err)
         this.captchaToken = '';
       },
       'expired-callback': () => {
@@ -164,6 +174,7 @@ export class AuthComponent implements OnInit {
         this.first_name,
         this.last_name,
         this.captchaToken,
+        this.family_id,
       )
       .pipe(take(1))
       .subscribe({
@@ -187,7 +198,6 @@ export class AuthComponent implements OnInit {
 
   private handleApiError(err: any): void {
     console.error(err);
-    alert(JSON.stringify(err))
     this.showError(err?.error ?? 'Erreur inconnue');
     // this.resetCaptcha();
   }

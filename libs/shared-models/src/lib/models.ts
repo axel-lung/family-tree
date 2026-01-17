@@ -47,3 +47,9 @@ export interface Family {
   id: number;
   name: string;
 }
+
+export interface UsersFamilies {
+    id: number;
+    user_id: number;
+    family_id: number;
+}

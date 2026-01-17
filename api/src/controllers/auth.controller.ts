@@ -7,7 +7,7 @@ import { PasswordResetToken } from '../models/password-reset-token';
 import { transporter } from '../config/email';
 
 export const register = async (req: Request, res: Response) => {
-  const { email, password, role, captchaToken, first_name, last_name } =
+  const { email, password, role, captchaToken, first_name, last_name, family_id } =
     req.body;
 
   if (!captchaToken) {

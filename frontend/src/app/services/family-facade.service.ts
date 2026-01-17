@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Family } from '@family-tree-workspace/shared-models';
+import { Family, UsersFamilies } from '@family-tree-workspace/shared-models';
 import { ApiService } from './api.service';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
@@ -9,6 +9,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 export class FamilyFacade {
   private readonly familiesCache = new BehaviorSubject<Family[]>([]);
   private readonly selectedFamily = new BehaviorSubject<Family | null>(null);
+  private readonly usersFamiliesCache = new BehaviorSubject<UsersFamilies[] | null>(null);
 
   constructor(private readonly apiService: ApiService) {}
 
@@ -36,6 +37,20 @@ export class FamilyFacade {
     return this.apiService.createFamily(family).pipe(
       tap((newFamily) => {
         this.familiesCache.next([...this.familiesCache.value, newFamily]);
+      })
+    );
+  }
+
+  getUsersFamiliesFromUser(userId: number): Observable<UsersFamilies[] | null> {
+    // Si on a déjà les données pour cet utilisateur en cache, on les retourne directement
+    if (this.usersFamiliesCache.value) { 
+      return this.usersFamiliesCache.asObservable();
+    }
+
+    // Sinon, on appelle l'API et on met en cache le résultat
+    return this.apiService.getUsersFamiliesFromUser(userId).pipe(
+      tap((usersFamilies) => {
+        this.usersFamiliesCache.next(usersFamilies);
       })
     );
   }

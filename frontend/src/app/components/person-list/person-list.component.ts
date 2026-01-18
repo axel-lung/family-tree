@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Family } from '@family-tree-workspace/shared-models';
+import { Family, User } from '@family-tree-workspace/shared-models';
 import { catchError, concatMap, map, of, Subject } from 'rxjs';
 import { PersonFacade } from '../../services/person-facade.service';
 import { FamilyService } from '../../services/family.service';
@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { FormsModule } from '@angular/forms';
 import { DataView } from 'primeng/dataview';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-person-list',
@@ -43,14 +44,19 @@ export class PersonListComponent {
   filteredPersons = [{}];
   searchValue: string = '';
   today: Date = new Date();
+  user: User | null = null;
 
   constructor(
     private readonly personFacade: PersonFacade,
     private readonly familyService: FamilyService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.authService.getUser().subscribe((user) => {
+      this.user = user;
+    });
     this.familySubscription = this.familyService
       .getSelectedFamily()
       .pipe(

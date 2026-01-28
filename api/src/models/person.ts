@@ -42,11 +42,11 @@ Person.init(
     },
     second_name: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     third_name: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
     },
     last_name: {
       type: DataTypes.STRING(100),

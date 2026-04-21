@@ -103,8 +103,8 @@
                     </span>                    
                 </td>
                 <td style="text-align: center">
-                  <p-button *ngIf="user.approved" severity="success" (click)="manageAcessUser(user.id, false)" rounded icon="pi pi-unlock" />
-                  <p-button *ngIf="!user.approved" severity="danger" (click)="manageAcessUser(user.id, true)" rounded icon="pi pi-lock" />
+                  <p-button *ngIf="user.approved" severity="success" (click)="manageAcessUser(user.id, false)" rounded icon="pi pi-unlock" onKeyDown="manageAcessUser(user.id, false)"/>
+                  <p-button *ngIf="!user.approved" severity="danger" (click)="manageAcessUser(user.id, true)" rounded icon="pi pi-lock" onKeyUp="manageAcessUser(user.id, false)"/>
                 </td>
                 <td style="text-align: center">
                     <div class="flex gap-2">

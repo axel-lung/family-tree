@@ -121,7 +121,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   private executeTurnstile(): Promise<string> {
     return new Promise((resolve, reject) => {
       if (!this.widgetId || !(window as any).turnstile) {
-        reject('Turnstile non disponible');
+        reject(new Error('Turnstile non disponible'));
         return;
       }
 

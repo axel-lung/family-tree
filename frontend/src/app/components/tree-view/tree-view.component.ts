@@ -107,7 +107,7 @@ export class TreeViewComponent implements OnInit {
       })
     ).subscribe(data => {
       const id = Number(this.route.snapshot.paramMap.get('id'));
-      if (!isNaN(id)) this.mainId = id;
+      if (!Number.isNaN(id)) this.mainId = id;
       this.create(data)
     });
   }

@@ -49,14 +49,14 @@ jobs:
           PORT: ${{ secrets.PORT }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key
-          chmod 600 private_key
-          eval $(ssh-agent -s)
-          ssh-add private_key
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          
+          ssh-keyscan -p $SSH_PORT -H $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null
 
-          ssh -p $SSH_PORT -i private_key -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion réussie'"
-
-          ssh-keyscan -p $SSH_PORT -H $SSH_HOST >> ~/.ssh/known_hosts
+          echo "Test de connexion"
+          ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion réussie'"
 
           echo "Créer le dossier et fichier .env distant"
           ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST \
@@ -73,16 +73,15 @@ jobs:
             echo 'PORT=$PORT' >> /opt/family-tree/.env && \
             echo 'DB_PASSWORD=\"$DB_PASSWORD\"' >> /opt/family-tree/.env"
 
-
           echo "Transfert de docker-compose.yml"
           scp -P $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
 
           echo "Déploiement Docker"
           ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
-            set -x
-            cd /opt/family-tree
-            docker compose pull
-            docker compose down --remove-orphans
-            docker compose up -d
-            docker image prune -f
+          set -e
+          cd /opt/family-tree
+          docker compose pull
+          docker compose down --remove-orphans
+          docker compose up -d
+          docker image prune -f
           EOF

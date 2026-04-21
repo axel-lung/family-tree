@@ -50,19 +50,19 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/family-tree-deploy
+          chmod 600 ~/.ssh/family-tree-deploy
           
           # Vérifier la clé
-          ssh-keygen -y -f ~/.ssh/id_rsa > /dev/null && echo "✅ Clé valide" || echo "❌ Clé invalide"
+          ssh-keygen -y -f ~/.ssh/family-tree-deploy > /dev/null && echo "✅ Clé valide" || echo "❌ Clé invalide"
           
           ssh-keyscan -p $SSH_PORT -H $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null
           
           # Test avec verbose
-          ssh -vvv -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo OK"
+          ssh -vvv -p $SSH_PORT -i ~/.ssh/family-tree-deploy -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo OK"
 
           echo "Créer le dossier et fichier .env distant"
-          ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST \
+          ssh -p $SSH_PORT -i ~/.ssh/family-tree-deploy -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST \
             "mkdir -p /opt/family-tree && \
             echo 'DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME' > /opt/family-tree/.env && \
             echo 'JWT_SECRET=$JWT_SECRET' >> /opt/family-tree/.env && \
@@ -77,10 +77,10 @@ jobs:
             echo 'DB_PASSWORD=\"$DB_PASSWORD\"' >> /opt/family-tree/.env"
 
           echo "Transfert de docker-compose.yml"
-          scp -P $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
+          scp -P $SSH_PORT -i ~/.ssh/family-tree-deploy -o StrictHostKeyChecking=no docker-compose.yml $SSH_USER@$SSH_HOST:/opt/family-tree/docker-compose.yml
 
           echo "Déploiement Docker"
-          ssh -p $SSH_PORT -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
+          ssh -p $SSH_PORT -i ~/.ssh/family-tree-deploy -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
           set -e
           cd /opt/family-tree
           docker compose pull

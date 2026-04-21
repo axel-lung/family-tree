@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
    import { redisClient } from '../config/redis.config';
-   import { randomBytes } from 'crypto';
+   import { randomBytes } from 'node:crypto';
 import { Person } from '../models/person';
 
    export const generateShareLink = async (req: Request, res: Response) => {

@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { Users_Families } from "../models/users-families";
 
-export const getFamiliessByUserId = async (req: Request, res: Response) => {
+export const getFamiliesByUserId = async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.id); // ou req.params.id si tu veux garder le nom
+    const userId = Number.parseInt(req.params.id); // ou req.params.id si tu veux garder le nom
 
-    if (isNaN(userId)) {
+    if (Number.isNaN(userId)) {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
 

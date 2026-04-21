@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Family, User } from '@family-tree-workspace/shared-models';
 import { catchError, concatMap, map, of, Subject } from 'rxjs';
@@ -10,7 +10,7 @@ import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectItem, SelectModule } from 'primeng/select';
+import { SelectModule } from 'primeng/select';
 import { Router } from '@angular/router';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { FormsModule } from '@angular/forms';
@@ -36,7 +36,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './person-list.component.html',
   styleUrl: './person-list.component.css',
 })
-export class PersonListComponent {
+export class PersonListComponent implements OnInit {
   family: Family = { id: 0, name: '' };
   familySubscription: any = new Subject<void>();
   loading: boolean = true;

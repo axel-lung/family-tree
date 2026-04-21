@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable no-console, no-unused-vars */
 import axios from 'axios';
 
 module.exports = async function () {

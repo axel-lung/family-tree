@@ -30,7 +30,7 @@ jobs:
           context: .
           file: api/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/family-tree-backend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/family-tree-backend:latest          
       - name: Deploy to server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -53,6 +53,8 @@ jobs:
           chmod 600 private_key
           mkdir -p ~/.ssh
           mv private_key ~/.ssh/id_rsa
+
+          ssh -i private_key -o StrictHostKeyChecking=no user@hostname "echo 'Connexion réussie'"
 
           ssh-keyscan -p $SSH_PORT -H $SSH_HOST >> ~/.ssh/known_hosts
 

@@ -49,12 +49,12 @@ jobs:
           PORT: ${{ secrets.PORT }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key     # (1) Crée dans le répertoire courant
-          chmod 600 private_key                     # (2) Permissions
-          eval $(ssh-agent -s)                      # (3) Démarre l'agent SSH
-          ssh-add private_key                       # (4) Ajoute la clé à l'agent
+          echo "$SSH_PRIVATE_KEY" > private_key
+          chmod 600 private_key
+          eval $(ssh-agent -s)
+          ssh-add private_key
 
-          ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion réussie'"
+          ssh -p $SSH_PORT -i private_key -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion réussie'"
 
           ssh-keyscan -p $SSH_PORT -H $SSH_HOST >> ~/.ssh/known_hosts
 

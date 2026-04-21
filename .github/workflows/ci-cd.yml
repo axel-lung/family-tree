@@ -54,7 +54,7 @@ jobs:
           mkdir -p ~/.ssh
           mv private_key ~/.ssh/id_rsa
 
-          ssh -i private_key -o StrictHostKeyChecking=no user@hostname "echo 'Connexion réussie'"
+          ssh -i private_key -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo 'Connexion réussie'"
 
           ssh-keyscan -p $SSH_PORT -H $SSH_HOST >> ~/.ssh/known_hosts
 

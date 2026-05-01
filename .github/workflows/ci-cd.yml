@@ -59,7 +59,7 @@ jobs:
           ssh-keyscan -p $SSH_PORT -H $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null
           
           # Test avec verbose
-          ssh -vvv -p $SSH_PORT -i ~/.ssh/github_actions -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo OK"
+          ssh -vvv -p $SSH_PORT -i ~/.ssh/github_actions -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "echo ✅ Test SSH OK"
 
           echo "Créer le dossier et fichier .env distant"
           ssh -p $SSH_PORT -i ~/.ssh/github_actions -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST \

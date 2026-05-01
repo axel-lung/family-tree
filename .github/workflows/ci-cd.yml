@@ -49,9 +49,9 @@ jobs:
           PORT: ${{ secrets.PORT }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
-          #mkdir -p ~/.ssh
-          #echo "$SSH_PRIVATE_KEY" > ~/.ssh/github_actions
-          #chmod 600 ~/.ssh/github_actions
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/github_actions
+          chmod 600 ~/.ssh/github_actions
           
           # Vérifier la clé
           ssh-keygen -y -f ~/.ssh/github_actions > /dev/null && echo "✅ Clé valide" || echo "❌ Clé invalide"
